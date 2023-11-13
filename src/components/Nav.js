@@ -8,9 +8,18 @@ import {
 } from "@material-tailwind/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 export default function Nav() {
   const [openNav, setOpenNav] = React.useState(false);
+
+    const navigate = useNavigate();
+
+    const handleLoginClick = () => {
+      // Naviguer vers la page souhaitée
+      navigate("/Registration"); // Remplacez "/login" par le chemin de votre page de connexion
+    };
+
 
   React.useEffect(() => {
     window.addEventListener(
@@ -65,13 +74,14 @@ export default function Nav() {
             <div className="mr-4 hidden lg:block">{navList}</div>
             <div className="flex items-center gap-x-1">
               <Button
-          
                 size="sm"
                 className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
+                onClick={handleLoginClick}
               >
                 <FontAwesomeIcon icon={faUser} />
                 <span> Connexion</span>
               </Button>
+
               <Button
                 variant="gradient"
                 size="sm"
