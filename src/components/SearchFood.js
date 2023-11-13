@@ -8,6 +8,7 @@ export default function SearchFood() {
       <div
         className="h-screen bg-cover bg-center flex items-center justify-start"
         style={{ backgroundImage: backgroundImageUrl }}
+        
       >
         <div className="text-white mx-4 w-100">
           <h2 className="text-xl md:text-4xl font-bold mb-4 text-center">

@@ -12,23 +12,6 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 export default function Nav() {
   const [openNav, setOpenNav] = React.useState(false);
 
-  const [isTransparent, setIsTransparent] = React.useState(true);
-
-  const handleScroll = () => {
-    if (window.scrollY > 0) {
-      setIsTransparent(false);
-    } else {
-      setIsTransparent(true);
-    }
-  };
-
-  React.useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   React.useEffect(() => {
     window.addEventListener(
       "resize",
@@ -68,15 +51,13 @@ export default function Nav() {
   return (
     <>
       <Navbar
-        className={`sticky top-0 z-10 max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4 ${
-          isTransparent ? "bg-transparent" : "bg-white"
-        }`}
+        className={`sticky top-0 z-10 max-w-full backdrop-blur-none shadow-none backdrop-saturate-100 bg-opacity-100 rounded-none border-0 px-4 py-3 lg:px-8 lg:py-4`}
       >
         <div className="flex items-center justify-between text-blue-gray-900">
           <Typography
             as="a"
             href="#"
-            className="mr-4 cursor-pointer py-1.5 font-medium no-underline"
+            className="mr-4 cursor-pointer py-1.5 text-4xl text-black no-underline"
           >
             EXPRESS <span className="fw-bold"> FOOD</span>
           </Typography>
@@ -84,9 +65,9 @@ export default function Nav() {
             <div className="mr-4 hidden lg:block">{navList}</div>
             <div className="flex items-center gap-x-1">
               <Button
-                variant="text"
+          
                 size="sm"
-                className="hidden rounded-full border lg:inline-block"
+                className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
               >
                 <FontAwesomeIcon icon={faUser} />
                 <span> Connexion</span>
@@ -94,7 +75,7 @@ export default function Nav() {
               <Button
                 variant="gradient"
                 size="sm"
-                className="hidden rounded-full lg:inline-block"
+                className="hidden rounded-full lg:inline-block w-44"
               >
                 <span>Inscription</span>
               </Button>
@@ -139,7 +120,6 @@ export default function Nav() {
           </div>
         </div>
         <MobileNav open={openNav}>
-          {navList}
           <div className="flex items-center gap-x-1 mb-3">
             <Button
               fullWidth
