@@ -2,46 +2,46 @@ import React from 'react'
 
 export default function Connection() {
   return (
-    <div class="flex min-h-screen items-center justify-center bg-gray-100">
-      <div class="rounded-lg bg-gray-50 shadow-xl px-16 py-16 w-6/12">
+    <div class="flex min-h-screen lg:items-center lg:justify-center bg-gray-50">
+      <div class="rounded-lg bg-gray-50 shadow-xl px-16 py-16 lg:w-6/12">
         <div class="flex flex-col">
           <h3 class="my-4 text-center text-3xl font-semibold text-black">
             Connexion
           </h3>
-          <form class="space-y-4 md:space-y-6" action="#">
-            <div>
-              <label
-                for="email"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Mail
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                class="bg-gray-200 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="name@company.com"
-                required=""
-              />
-            </div>
-            <div>
-              <label
-                for="password"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Mot de passe
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="••••••••"
-                class="bg-gray-200 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required=""
-              />
-            </div>
-          </form>
+          <form  className="max-w-md mt-5 mx-auto">
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block text-gray-600 text-sm font-medium mb-1"
+            >
+             E-mail
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              className="border border-gray-300 bg-gray-200 rounded-md text-dark w-100 focus:outline-none p-2 mr-2"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="address"
+              className="block text-gray-600 text-sm font-medium mb-1"
+            >
+              Mot de passe
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              // value={formData.address}
+              // onChange={handleChange}
+              className="border border-gray-300 bg-gray-200 rounded-md text-dark w-100 focus:outline-none p-2 mr-2"
+              required
+            />
+        </div>
+      </form>
           <button class="mx-auto my-10 block rounded-xl border-4 border-transparent bg-gray-900 px-6  text-center text-base font-medium text-white w-56 hover:bg-gray-800 hover:duration-300">
             Se connecter
           </button>
