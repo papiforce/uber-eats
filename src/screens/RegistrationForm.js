@@ -1,13 +1,15 @@
 import React, { useState } from "react";
+import { Alert } from "@material-tailwind/react";
+import axios from "axios";
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     email: "",
     address: "",
   });
-
+  const [alertMessage, setAlertMessage] = useState(null);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -16,30 +18,61 @@ const RegistrationForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(formData);
+    try {
+      const response = await axios.post("http://localhost:4400/api/auth/signup",({
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        email: formData.email,
+        password: formData.password,
+        address: {
+          address: formData.address,
+        },
+      }
+),{
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.status === 200) {
+          setAlertMessage("Compte créé");
+        } else {
+          console.log(response.data);
+          setAlertMessage(null);
+        }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setAlertMessage(error.response.data.error);
+      } else if (error.response.status === 500) {
+        setAlertMessage("Problème lors de l'inscription, vérifiez vos informations");
+      }
+      else {
+        console.error("Registration failed", error);
+      }
+    }
   };
+
 
   return (
     <div className="container mx-auto mt-8">
       <h1 className="text-3xl text-center mb-5 font-semibold mb-4">
         Inscription
       </h1>
+      {alertMessage && <Alert color="black">{alertMessage}</Alert>}
       <form onSubmit={handleSubmit} className="max-w-md mt-5 mx-auto">
         <div className="mb-4">
           <label
-            htmlFor="firstName"
+            htmlFor="firstname"
             className="block text-gray-600 text-sm font-medium mb-1"
           >
             Prénom
           </label>
           <input
             type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
+            id="firstname"
+            name="firstname"
+            value={formData.firstname}
             onChange={handleChange}
             className="border border-gray-300 bg-gray-200 rounded-md text-dark w-100 focus:outline-none  p-2 mr-2"
             required
@@ -47,7 +80,7 @@ const RegistrationForm = () => {
         </div>
         <div className="mb-4">
           <label
-            htmlFor="lastName"
+            htmlFor="lastname"
             className="block text-gray-600 text-sm font-medium mb-1"
           >
             Nom
@@ -55,8 +88,8 @@ const RegistrationForm = () => {
           <input
             type="text"
             id="lastName"
-            name="lastName"
-            value={formData.lastName}
+            name="lastname"
+            value={formData.lastname}
             onChange={handleChange}
             className="border border-gray-300 bg-gray-200 rounded-md text-dark w-100 focus:outline-none p-2 mr-2"
             required
@@ -81,6 +114,23 @@ const RegistrationForm = () => {
         </div>
         <div className="mb-4">
           <label
+            htmlFor="password"
+            className="block text-gray-600 text-sm font-medium mb-1"
+          >
+            Mot de passe
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="border border-gray-300 bg-gray-200 rounded-md text-dark w-100 focus:outline-none p-2 mr-2"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label
             htmlFor="address"
             className="block text-gray-600 text-sm font-medium mb-1"
           >
@@ -93,7 +143,7 @@ const RegistrationForm = () => {
             onChange={handleChange}
             className="border border-gray-300 bg-gray-200 rounded-md text-dark w-100 focus:outline-none p-2 mr-2"
             required
-          />
+          />         
         </div>
         <div className="text-center">
           <button
