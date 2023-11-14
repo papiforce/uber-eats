@@ -1,22 +1,61 @@
-import { Route, Routes } from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Nav from "./components/Nav";
-import ListProduct from "./screens/ListProduct";
-import RegistrationForm from "./screens/RegistrationForm";
-import Connection from "./screens/Connection"
+import Cookies from "js-cookie";
 
+import { AuthContext } from "contexts/AuthContext";
+import { useCurrentUser } from "api/authQueries";
 
-function App() {
+import SecurityGuard from "pages/layouts/SecurityGuard";
+
+import HomePage from "pages/HomePage";
+import RegistrationForm from "pages/RegistrationForm";
+import LoginPage from "pages/LoginPage";
+
+const App = () => {
+  const [auth, setAuth] = useState({
+    isAuthenticated: Cookies.get("fe-token") ? true : false,
+    user: null,
+  });
+
+  const onSuccess = (payload) => {
+    setAuth({ isAuthenticated: true, user: payload });
+  };
+
+  const onError = () => {
+    Cookies.remove("fe-token");
+    setAuth({ isAuthenticated: false, user: null });
+  };
+
+  const { isLoading } = useCurrentUser(onSuccess, onError);
+
+  if (isLoading) return <>LOADING...</>;
+
   return (
-    <div>
-      <Nav />
-      <Routes>
-        <Route path="/" element={<ListProduct />}></Route>
-        <Route path="/Registration" element={<RegistrationForm />}></Route>
-        <Route path="/login" element={<Connection />}></Route>
-      </Routes>
-    </div>
+    <AuthContext.Provider value={{ auth, setAuth }}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/register"
+            element={
+              <SecurityGuard loggedRedirectionPath="/">
+                <RegistrationForm />
+              </SecurityGuard>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <SecurityGuard loggedRedirectionPath="/">
+                <LoginPage />
+              </SecurityGuard>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthContext.Provider>
   );
-}
+};
 
 export default App;
