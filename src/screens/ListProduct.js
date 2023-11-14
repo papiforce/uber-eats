@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import SearchFood from "../components/SearchFood";
 import axios from "axios";
 
-
 const ListProduct = () => {
   const [quantities, setQuantities] = useState({});
-    const [products, setProducts] = useState([]);  
-    const [cart, setCart] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
 
   useEffect(() => {
     // Function to fetch data from the API
@@ -38,33 +37,32 @@ const ListProduct = () => {
     }));
   };
 
- const handleAddToCart = (
-   productId,
-   productName,
-   productPrice,
-   productPhoto
- ) => {
-   const quantity = quantities[productId] || 0;
+  const handleAddToCart = (
+    productId,
+    productName,
+    productPrice,
+    productPhoto
+  ) => {
+    const quantity = quantities[productId] || 1;
 
-   if (quantity > 0) {
-     const updatedCart = [
-       ...cart,
-       { productId, productName, productPrice, quantity, productPhoto },
-     ];
-     setCart(updatedCart);
-     // Optional: You can reset the quantity to 0 after adding to the cart
-     setQuantities((prevQuantities) => ({
-       ...prevQuantities,
-       [productId]: 0,
-     }));
-     alert(`Added ${quantity} ${productName}(s) to cart`);
+    if (quantity > 0) {
+      const updatedCart = [
+        ...cart,
+        { productId, productName, productPrice, quantity, productPhoto },
+      ];
+      setCart(updatedCart);
+      // Optional: You can reset the quantity to 0 after adding to the cart
+      setQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [productId]: 0,
+      }));
 
-     // Store the updated cart in localStorage
-     localStorage.setItem("cart", JSON.stringify(updatedCart));
-   } else {
-     alert("Please select a quantity greater than 0.");
-   }
- };
+      // Store the updated cart in localStorage
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+    } else {
+      alert("Please select a quantity greater than 0.");
+    }
+  };
   return (
     <>
       <SearchFood />
@@ -94,7 +92,7 @@ const ListProduct = () => {
                     >
                       -
                     </button>
-                    <span className="px-4">{quantities[product._id] || 0}</span>
+                    <span className="px-4">{quantities[product._id] || 1}</span>
                     <button
                       className="bg-black text-white px-4 py-2 rounded-r-md"
                       onClick={() => handleIncrement(product._id)}

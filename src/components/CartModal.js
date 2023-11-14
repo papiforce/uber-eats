@@ -6,22 +6,25 @@ import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 export default function CartModal({ isOpen, onClose, cartItems }) {
   const cancelButtonRef = useRef(null);
 
+  const [currentCartItems, setCurrentCartItems] = useState(cartItems);
+
   const [quantities, setQuantities] = useState(() => {
-    // Use a function for the initial state to handle potential issues
-    return cartItems.reduce(
-      (acc, item) => ({ ...acc, [item.productId]: item.quantity || 1 }),
-      {}
-    );
+    const initialQuantities = {};
+    cartItems.forEach((item) => {
+      initialQuantities[item.productId] = item.quantity || 1;
+    });
+    return initialQuantities;
   });
 
   useEffect(() => {
-    // Update local storage when quantities change
-    const updatedCart = cartItems.map((item) => ({
-      ...item,
-      quantity: quantities[item.productId] || 1,
-    }));
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-  }, [quantities, cartItems]);
+    setQuantities((prevQuantities) => {
+      const updatedQuantities = {};
+      cartItems.forEach((item) => {
+        updatedQuantities[item.productId] = item.quantity || 1;
+      });
+      return updatedQuantities;
+    });
+  }, [isOpen, cartItems]);
 
   const handleIncrement = (productId) => {
     setQuantities((prevQuantities) => ({
@@ -37,16 +40,20 @@ export default function CartModal({ isOpen, onClose, cartItems }) {
     }));
   };
 
-  const handleRemove = (productId) => {
-    const updatedCart = cartItems.filter(
-      (item) => item.productId !== productId
-    );
-    setQuantities((prevQuantities) => {
-      const { [productId]: removedItem, ...rest } = prevQuantities;
-      return rest;
-    });
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-  };
+const handleRemove = (productId) => {
+  // Mise à jour du local storage avec les quantités actuelles après suppression
+  const updatedCart = cartItems.filter((item) => item.productId !== productId);
+  localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+  // Mise à jour des quantités sans dépendre de l'état actuel de cartItems
+  setQuantities((prevQuantities) => {
+    const { [productId]: removedItem, ...rest } = prevQuantities;
+    return rest;
+  });
+
+  // Mise à jour de la liste actuelle des produits dans le panier
+  setCurrentCartItems(updatedCart);
+};
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -84,7 +91,7 @@ export default function CartModal({ isOpen, onClose, cartItems }) {
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <div className="mt-2 p-0">
                       <ul>
-                        {cartItems.map((item, index) => (
+                        {currentCartItems.map((item, index) => (
                           <li className="mt-4" key={index}>
                             <div className="flex">
                               <div className="flex-auto m-auto w-56">
