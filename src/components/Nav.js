@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Navbar,
   MobileNav,
@@ -10,22 +10,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import CartModal from "./CartModal"; // Adjust the path based on your project structure
 
 export default function Nav() {
   const [openNav, setOpenNav] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const [isCartModalOpen, setCartModalOpen] = useState(false);
+  const toggleCartModal = () => {
+    setCartModalOpen(!isCartModalOpen);
+  };
+
   const handleRegisterClick = () => {
     // Naviguer vers la page d'inscription
-    navigate("/Registration"); 
+    navigate("/Registration");
   };
 
   const handleLoginClick = () => {
     // Naviguer vers la page connexion
-    navigate("/login"); 
+    navigate("/login");
   };
-
 
   React.useEffect(() => {
     window.addEventListener(
@@ -36,7 +43,6 @@ export default function Nav() {
 
   const isRegistrationPage = location.pathname === "/Registration";
   const isLoginPage = location.pathname === "/login";
-
 
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -62,7 +68,7 @@ export default function Nav() {
             <Button
               size="sm"
               className="bg-transparant text-dark rounded-full"
-              onClick={handleLoginClick}
+              onClick={toggleCartModal}
             >
               <FontAwesomeIcon icon={faCartShopping} />
             </Button>
@@ -99,5 +105,12 @@ export default function Nav() {
         </div>
         <MobileNav open={openNav}></MobileNav>
       </Navbar>
+
+      <CartModal
+        isOpen={isCartModalOpen}
+        onClose={toggleCartModal}
+        cartItems={cartItems}
+      />
     </>
-  );}
+  );
+}

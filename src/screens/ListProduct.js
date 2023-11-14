@@ -5,7 +5,8 @@ import axios from "axios";
 
 const ListProduct = () => {
   const [quantities, setQuantities] = useState({});
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState([]);  
+    const [cart, setCart] = useState([]);
 
   useEffect(() => {
     // Function to fetch data from the API
@@ -37,6 +38,33 @@ const ListProduct = () => {
     }));
   };
 
+ const handleAddToCart = (
+   productId,
+   productName,
+   productPrice,
+   productPhoto
+ ) => {
+   const quantity = quantities[productId] || 0;
+
+   if (quantity > 0) {
+     const updatedCart = [
+       ...cart,
+       { productId, productName, productPrice, quantity, productPhoto },
+     ];
+     setCart(updatedCart);
+     // Optional: You can reset the quantity to 0 after adding to the cart
+     setQuantities((prevQuantities) => ({
+       ...prevQuantities,
+       [productId]: 0,
+     }));
+     alert(`Added ${quantity} ${productName}(s) to cart`);
+
+     // Store the updated cart in localStorage
+     localStorage.setItem("cart", JSON.stringify(updatedCart));
+   } else {
+     alert("Please select a quantity greater than 0.");
+   }
+ };
   return (
     <>
       <SearchFood />
@@ -44,7 +72,10 @@ const ListProduct = () => {
         <h1 className="text-3xl font-semibold mb-4">Menu</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {products.map((product) => (
-            <div key={product._id} className="bg-white p-0 rounded-md shadow-md">
+            <div
+              key={product._id}
+              className="bg-white p-0 rounded-md shadow-md"
+            >
               <img
                 src={product.photo}
                 alt={product.name}
@@ -75,10 +106,11 @@ const ListProduct = () => {
                 <button
                   className="mt-4 bg-black text-white px-4 py-2 rounded-md"
                   onClick={() =>
-                    alert(
-                      `Added ${quantities[product._id] || 0} ${
-                        product.name
-                      }(s) to cart`
+                    handleAddToCart(
+                      product._id,
+                      product.name,
+                      product.price,
+                      product.photo
                     )
                   }
                 >
