@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import SearchFood from "../components/SearchFood";
-import axios from "axios";
 import Layout from "./layouts/Layout";
 import { useGetMenu } from "api/mealQueries";
 

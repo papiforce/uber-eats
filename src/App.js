@@ -9,7 +9,7 @@ import { useCurrentUser } from "api/authQueries";
 import SecurityGuard from "pages/layouts/SecurityGuard";
 
 import HomePage from "pages/HomePage";
-import RegistrationForm from "pages/RegistrationForm";
+import RegisterPage from "pages/RegisterPage";
 import LoginPage from "pages/LoginPage";
 
 const App = () => {
@@ -40,7 +40,7 @@ const App = () => {
             path="/register"
             element={
               <SecurityGuard loggedRedirectionPath="/">
-                <RegistrationForm />
+                <RegisterPage />
               </SecurityGuard>
             }
           />
