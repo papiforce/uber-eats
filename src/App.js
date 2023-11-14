@@ -3,6 +3,7 @@ import "./App.css";
 import Nav from "./components/Nav";
 import ListProduct from "./screens/ListProduct";
 import RegistrationForm from "./screens/RegistrationForm";
+import Connection from "./screens/Connection"
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ListProduct />}></Route>
         <Route path="/Registration" element={<RegistrationForm />}></Route>
+        <Route path="/login" element={<Connection />}></Route>
       </Routes>
     </div>
   );

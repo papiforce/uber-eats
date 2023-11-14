@@ -15,9 +15,14 @@ export default function Nav() {
 
     const navigate = useNavigate();
 
+    const handleRegisterClick = () => {
+      // Naviguer vers la page d'inscription
+      navigate("/Registration"); 
+    };
+
     const handleLoginClick = () => {
-      // Naviguer vers la page souhaitée
-      navigate("/Registration"); // Remplacez "/login" par le chemin de votre page de connexion
+      // Naviguer vers la page connexion
+      navigate("/login"); 
     };
 
 
@@ -86,6 +91,7 @@ export default function Nav() {
                 variant="gradient"
                 size="sm"
                 className="hidden rounded-full lg:inline-block w-44"
+                onClick={handleRegisterClick}
               >
                 <span>Inscription</span>
               </Button>
