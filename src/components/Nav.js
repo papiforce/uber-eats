@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate, useLocation } from "react-router-dom";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 
 export default function Nav() {
   const [openNav, setOpenNav] = React.useState(false);
@@ -58,6 +59,13 @@ export default function Nav() {
           </Typography>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
+            <Button
+              size="sm"
+              className="bg-transparant text-dark rounded-full"
+              onClick={handleLoginClick}
+            >
+              <FontAwesomeIcon icon={faCartShopping} />
+            </Button>
             {!isRegistrationPage && !isLoginPage && (
               <div className="flex items-center gap-x-1">
                 <Button
@@ -68,7 +76,7 @@ export default function Nav() {
                   <FontAwesomeIcon icon={faUser} />
                   <span> Connexion</span>
                 </Button>
-  
+
                 <Button
                   variant="gradient"
                   size="sm"
@@ -81,7 +89,7 @@ export default function Nav() {
             )}
             <IconButton
               variant="text"
-              className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+              className="ml-auto h-6 w-6 text-inherit  active:bg-transparent lg:hidden"
               ripple={false}
               onClick={() => setOpenNav(!openNav)}
             >
@@ -89,11 +97,7 @@ export default function Nav() {
             </IconButton>
           </div>
         </div>
-        <MobileNav open={openNav}>
-          <div className="flex items-center gap-x-1 mb-3">
-            {/* Your mobile buttons go here */}
-          </div>
-        </MobileNav>
+        <MobileNav open={openNav}></MobileNav>
       </Navbar>
     </>
-  )}
+  );}
