@@ -43,6 +43,7 @@ export default function Nav() {
 
   const isRegistrationPage = location.pathname === "/Registration";
   const isLoginPage = location.pathname === "/login";
+  console.log(openNav);
 
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -95,15 +96,57 @@ export default function Nav() {
             )}
             <IconButton
               variant="text"
-              className="ml-auto h-6 w-6 text-inherit  active:bg-transparent lg:hidden"
+              className="ml-auto h-6 w-6 text-inherit active:bg-transparent lg:hidden"
               ripple={false}
               onClick={() => setOpenNav(!openNav)}
             >
-              {/* Your icon code goes here */}
+            <div className="HAMBURGER-ICON space-y-2">
+              {!openNav && (
+                <>
+                  <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
+                  <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
+                  <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span> 
+                </>
+                
+              )}
+              {openNav && (
+                <>
+                <svg
+                className="h-8 w-8 text-gray-600"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+                </>
+              )}
+          </div>
             </IconButton>
+ 
           </div>
         </div>
-        <MobileNav open={openNav}></MobileNav>
+        <MobileNav open={openNav}>
+          <Button
+              size="sm"
+              className="bg-white text-black border w-full"
+              onClick={handleLoginClick}
+            >
+              <FontAwesomeIcon icon={faUser} />
+              <span> Connexion</span>
+            </Button>  
+            <Button
+                  variant="sm"
+                  className="bg-white text-black border w-full"
+                  onClick={handleRegisterClick}
+                >
+                  <span>Inscription</span>
+                </Button>        
+        </MobileNav>
       </Navbar>
 
       <CartModal
