@@ -82,6 +82,7 @@ const ListProduct = () => {
                 src={product.image}
                 alt={product.name}
                 className="w-full h-56 object-cover mb-4 rounded-t-md"
+                style={{filter: 'revert'}}
               />
               <div className="px-3 pb-4">
                 <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
