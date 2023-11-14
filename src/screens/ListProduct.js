@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SearchFood from "../components/SearchFood";
 import axios from "axios";
+import { BlogCard } from "../components/blogCard";
 
 
 const ListProduct = () => {
@@ -120,6 +121,8 @@ const ListProduct = () => {
             </div>
           ))}
         </div>
+
+        <BlogCard />
       </div>
     </>
   );

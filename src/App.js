@@ -4,6 +4,7 @@ import Nav from "./components/Nav";
 import ListProduct from "./screens/ListProduct";
 import RegistrationForm from "./screens/RegistrationForm";
 import Connection from "./screens/Connection"
+import WaitingOrder from "./screens/WaitingOrder";
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<ListProduct />}></Route>
         <Route path="/Registration" element={<RegistrationForm />}></Route>
         <Route path="/login" element={<Connection />}></Route>
+        <Route path="/waitingOrder" element={<WaitingOrder />}></Route>
       </Routes>
     </div>
   );
