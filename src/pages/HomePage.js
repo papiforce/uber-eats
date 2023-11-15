@@ -1,12 +1,13 @@
-// HomePage.js
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SearchFood from "../components/SearchFood";
 import Layout from "./layouts/Layout";
 import { useGetMenu } from "api/mealQueries";
 import ProductCard from "../components/ProductCard";
+import { AuthContext } from "contexts/AuthContext";
 
 const HomePage = () => {
-  const [quantities, setQuantities] = useState({});
+  const { auth } = useContext(AuthContext);
+
   const [products, setProducts] = useState([]);
 
   const onSuccess = (payload) => {
@@ -15,18 +16,49 @@ const HomePage = () => {
 
   useGetMenu(onSuccess);
 
-  const handleIncrement = (productId) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: (prevQuantities[productId] || 0) + 1,
-    }));
-  };
+  const addToCart = (product) => {
+    const cart = localStorage.getItem(`cart-${auth.user._id}`);
 
-  const handleDecrement = (productId) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: Math.max((prevQuantities[productId] || 0) - 1, 0),
-    }));
+    if (!cart)
+      return localStorage.setItem(
+        `cart-${auth.user._id}`,
+        JSON.stringify({
+          userId: auth.user._id,
+          productIds: [{ productId: product._id, product }],
+          address: auth.user.address ?? "",
+        })
+      );
+
+    const parseCart = JSON.parse(cart);
+    const { productIds } = parseCart;
+
+    const productInCart = productIds.find(
+      (subItem) => subItem.itemId === product._id
+    );
+
+    if (productInCart) {
+      productInCart.product.quantity += product.quantity;
+      productIds[productIds.indexOf(productInCart)] = productInCart;
+
+      const updatedCart = { ...parseCart, productIds };
+
+      return localStorage.setItem(
+        `cart-${auth.user._id}`,
+        JSON.stringify(updatedCart)
+      );
+    }
+
+    productIds.push({
+      productId: product._id,
+      product,
+    });
+
+    const updatedCart = { ...parseCart, productIds };
+
+    return localStorage.setItem(
+      `cart-${auth.user._id}`,
+      JSON.stringify(updatedCart)
+    );
   };
 
   return (
@@ -39,9 +71,7 @@ const HomePage = () => {
             <ProductCard
               key={product._id}
               product={product}
-              onDecrement={handleDecrement}
-              onIncrement={handleIncrement}
-              quantity={quantities[product._id] || 0}
+              onClick={(product) => addToCart(product)}
             />
           ))}
         </div>
