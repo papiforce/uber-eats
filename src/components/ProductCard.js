@@ -1,6 +1,3 @@
-// ProductCard.js
-import React from "react";
-
 const ProductCard = ({ product, onDecrement, onIncrement, quantity }) => {
   return (
     <div className="bg-white p-0 rounded-md shadow-md">
