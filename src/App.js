@@ -58,10 +58,11 @@ const App = () => {
             path="/addProduct"
             element={
               // <SecurityGuard loggedRedirectionPath="/">
-                <AddProductPage />
+              <AddProductPage />
               // </SecurityGuard>
+            }
           />
-           <Route
+          <Route
             path="/admin"
             element={
               <SecurityGuard>
