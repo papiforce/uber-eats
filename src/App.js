@@ -11,6 +11,7 @@ import SecurityGuard from "pages/layouts/SecurityGuard";
 import HomePage from "pages/HomePage";
 import RegisterPage from "pages/RegisterPage";
 import LoginPage from "pages/LoginPage";
+import ProductListPage from "pages/ProductListPage";
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -50,6 +51,14 @@ const App = () => {
               <SecurityGuard loggedRedirectionPath="/">
                 <LoginPage />
               </SecurityGuard>
+            }
+          />
+          <Route
+            path="/ProductList"
+            element={
+              // <SecurityGuard loggedRedirectionPath="/">
+                <ProductListPage />
+              // </SecurityGuard>
             }
           />
         </Routes>
