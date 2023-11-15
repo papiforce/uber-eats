@@ -27,6 +27,10 @@ export default function Nav() {
     navigate("/login");
   };
 
+  const handleAdminClick = () => {
+    navigate("/admin");
+  };
+
   useEffect(() => {
     window.addEventListener(
       "resize",
@@ -55,15 +59,15 @@ export default function Nav() {
           </Typography>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
-            <Button
+            {!auth.isAuthenticated ? (
+              <div className="flex items-center gap-x-1">
+                            <Button
               size="sm"
               className="bg-transparant text-dark rounded-full"
               onClick={!auth.isAuthenticated ? handleLoginClick : () => {}}
             >
               <FontAwesomeIcon icon={faCartShopping} />
             </Button>
-            {!auth.isAuthenticated ? (
-              <div className="flex items-center gap-x-1">
                 <Button
                   size="sm"
                   className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
@@ -83,7 +87,26 @@ export default function Nav() {
                 </Button>
               </div>
             ) : (
-              <>{/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}</>
+              <>{/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
+              {/* Onglet ADMIN pour accèder à l'interface admin */}
+                {auth.user.role === "ADMIN" && (
+                    <Button
+                    size="sm"
+                    className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
+                    onClick={handleAdminClick}
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                    <span> Admin </span>
+                  </Button>           
+                )}       
+             <Button
+              size="sm"
+              className="bg-transparant text-dark rounded-full"
+              onClick={!auth.isAuthenticated ? handleLoginClick : () => {}}
+            >
+              <FontAwesomeIcon icon={faCartShopping} />
+            </Button> 
+              </>
             )}
             <IconButton
               variant="text"
@@ -139,7 +162,18 @@ export default function Nav() {
               </Button>
             </>
           ) : (
-            <>{/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}</>
+            <>{/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
+            {auth.user.role == "ADMIN" && (
+                 <Button
+                 size="sm"
+                 className="bg-white text-black border w-full"
+                 onClick={handleAdminClick}
+               >
+                 <FontAwesomeIcon icon={faUser} />
+                 <span> Admin </span>
+               </Button>        
+                )}        
+            </>
           )}
         </MobileNav>
       </Navbar>

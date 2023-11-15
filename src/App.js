@@ -12,6 +12,7 @@ import HomePage from "pages/HomePage";
 import RegisterPage from "pages/RegisterPage";
 import LoginPage from "pages/LoginPage";
 import AddProductPage from "pages/AddProductPage";
+import AdminPage from "pages/AdminPage";
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -59,6 +60,13 @@ const App = () => {
               // <SecurityGuard loggedRedirectionPath="/">
                 <AddProductPage />
               // </SecurityGuard>
+          />
+           <Route
+            path="/admin"
+            element={
+              <SecurityGuard>
+                <AdminPage />
+              </SecurityGuard>
             }
           />
         </Routes>
