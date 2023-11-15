@@ -1,18 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter } from 'react-router-dom';
+import { QueryClientProvider, QueryClient } from "react-query";
 
+const root = ReactDOM.createRoot(document.getElementById("root"));
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnmount: false,
+      refetchOnReconnect: false,
+      retry: false,
+    },
+  },
+});
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
       <App />
-    </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

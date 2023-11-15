@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Alert } from "@material-tailwind/react";
 import axios from "axios";
 
-const RegistrationForm = () => {
+const RegisterPage = () => {
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -21,38 +21,41 @@ const RegistrationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4400/api/auth/signup",({
-        firstname: formData.firstname,
-        lastname: formData.lastname,
-        email: formData.email,
-        password: formData.password,
-        address: {
-          address: formData.address,
-        },
-      }
-),{
-          headers: {
-            'Content-Type': 'application/json',
+      const response = await axios.post(
+        "http://localhost:4400/api/auth/signup",
+        {
+          firstname: formData.firstname,
+          lastname: formData.lastname,
+          email: formData.email,
+          password: formData.password,
+          address: {
+            address: formData.address,
           },
-        });
-        if (response.status === 200) {
-          setAlertMessage("Compte créé");
-        } else {
-          console.log(response.data);
-          setAlertMessage(null);
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
+      );
+      if (response.status === 200) {
+        setAlertMessage("Compte créé");
+      } else {
+        console.log(response.data);
+        setAlertMessage(null);
+      }
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setAlertMessage(error.response.data.error);
       } else if (error.response.status === 500) {
-        setAlertMessage("Problème lors de l'inscription, vérifiez vos informations");
-      }
-      else {
+        setAlertMessage(
+          "Problème lors de l'inscription, vérifiez vos informations"
+        );
+      } else {
         console.error("Registration failed", error);
       }
     }
   };
-
 
   return (
     <div className="container mx-auto mt-8">
@@ -143,7 +146,7 @@ const RegistrationForm = () => {
             onChange={handleChange}
             className="border border-gray-300 bg-gray-200 rounded-md text-dark w-100 focus:outline-none p-2 mr-2"
             required
-          />         
+          />
         </div>
         <div className="text-center">
           <button
@@ -158,4 +161,4 @@ const RegistrationForm = () => {
   );
 };
 
-export default RegistrationForm;
+export default RegisterPage;

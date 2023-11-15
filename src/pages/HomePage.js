@@ -1,27 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import SearchFood from "../components/SearchFood";
-import axios from "axios";
+import Layout from "./layouts/Layout";
+import { useGetMenu } from "api/mealQueries";
 
-
-const ListProduct = () => {
+const HomePage = () => {
   const [quantities, setQuantities] = useState({});
-    const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    // Function to fetch data from the API
-    const fetchMeals = async () => {
-      try {
-        const response = await axios.get("http://localhost:4400/api/meals/");
-        // Assuming the API response has a data property containing an array of meals
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Error fetching meals:", error);
-      }
-    };
+  const onSuccess = (payload) => {
+    setProducts(payload);
+  };
 
-    // Call the function to fetch data when the component mounts
-    fetchMeals();
-  }, []); // Empty dependency array to run the effect only once when the component mounts
+  useGetMenu(onSuccess);
 
   const handleIncrement = (productId) => {
     setQuantities((prevQuantities) => ({
@@ -38,13 +28,16 @@ const ListProduct = () => {
   };
 
   return (
-    <>
+    <Layout>
       <SearchFood />
       <div className="container mx-auto my-8">
         <h1 className="text-3xl font-semibold mb-4">Menu</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {products.map((product) => (
-            <div key={product._id} className="bg-white p-0 rounded-md shadow-md">
+            <div
+              key={product._id}
+              className="bg-white p-0 rounded-md shadow-md"
+            >
               <img
                 src={product.photo}
                 alt={product.name}
@@ -55,7 +48,7 @@ const ListProduct = () => {
                 <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
                 <p className="text-gray-600 mb-4">{product.description}</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold">{product.price}</span>
+                  <span className="text-lg font-bold">{product.price}€</span>
                   <div className="flex items-center">
                     <button
                       className="bg-black text-white px-4 py-2 rounded-l-md"
@@ -89,8 +82,8 @@ const ListProduct = () => {
           ))}
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 
-export default ListProduct;
+export default HomePage;
