@@ -1,8 +1,8 @@
 import { axiosInstance } from "./axiosInstance";
 import { useQuery, useMutation } from "react-query";
 
-const getUsers = async (options) => {
-  const { data } = await axiosInstance.get(`/users?${options}`);
+const getUsers = async () => {
+  const { data } = await axiosInstance.get(`/users`);
 
   return data;
 };

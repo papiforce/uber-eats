@@ -14,7 +14,7 @@ import LoginPage from "pages/LoginPage";
 import AddProductPage from "pages/AddProductPage";
 import AdminPage from "pages/AdminPage";
 import ProductListPage from "pages/ProductListPage";
-import ListUsersPage from "pages/ListUsersPage";
+import UsersListPage from "pages/UsersListPage";
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -86,10 +86,18 @@ const App = () => {
             }
           />
           <Route
+            path="/dashboard/products"
+            element={
+              <SecurityGuard adminRedirectionPath="/">
+                <ProductListPage />
+              </SecurityGuard>
+            }
+          />
+          <Route
             path="/dashboard/listUsers"
             element={
               <SecurityGuard adminRedirectionPath="/">
-                <ListUsersPage />
+                <UsersListPage />
               </SecurityGuard>
             }
           />
