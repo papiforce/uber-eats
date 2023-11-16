@@ -10,12 +10,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-
 import { AuthContext } from "contexts/AuthContext";
+import { OrderContext } from "contexts/OrderContext";
+
 
 export default function Nav() {
   const { auth } = useContext(AuthContext);
-
+  const  { orderConfirmed }  = useContext(OrderContext);
   const [openNav, setOpenNav] = useState(false);
   const navigate = useNavigate();
 
@@ -31,6 +32,9 @@ export default function Nav() {
     navigate("/admin");
   };
 
+  const handleOrderClick = () => {
+    navigate("/order");
+  };
   useEffect(() => {
     window.addEventListener(
       "resize",
@@ -43,6 +47,7 @@ export default function Nav() {
       {/* Your list items go here */}
     </ul>
   );
+
 
   return (
     <>
@@ -98,13 +103,19 @@ export default function Nav() {
                     <FontAwesomeIcon icon={faUser} />
                     <span> Admin </span>
                   </Button>           
-                )}       
+                )}   
+
+            { orderConfirmed &&            
+              <Button variant="filled" onClick={handleOrderClick} >Commande en cours</Button>             
+            } 
+
              <Button
               size="sm"
               className="bg-transparant text-dark rounded-full"
               onClick={!auth.isAuthenticated ? handleLoginClick : () => {}}
             >
               <FontAwesomeIcon icon={faCartShopping} />
+              
             </Button> 
               </>
             )}
