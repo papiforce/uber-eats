@@ -11,6 +11,8 @@ import SecurityGuard from "pages/layouts/SecurityGuard";
 import HomePage from "pages/HomePage";
 import RegisterPage from "pages/RegisterPage";
 import LoginPage from "pages/LoginPage";
+import AddProductPage from "pages/AddProductPage";
+import AdminPage from "pages/AdminPage";
 import ProductListPage from "pages/ProductListPage";
 
 const App = () => {
@@ -54,6 +56,22 @@ const App = () => {
             }
           />
           <Route
+            path="/addProduct"
+            element={
+              // <SecurityGuard loggedRedirectionPath="/">
+              <AddProductPage />
+              // </SecurityGuard>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <SecurityGuard>
+                <AdminPage />
+              </SecurityGuard>
+            }
+          />
+             <Route
             path="/ProductList"
             element={
               // <SecurityGuard loggedRedirectionPath="/">

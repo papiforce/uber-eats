@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { Alert } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Layout from "./layouts/Layout";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
     email: "",
     address: "",
   });
+
   const [alertMessage, setAlertMessage] = useState(null);
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,6 +20,10 @@ const RegisterPage = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleSuccess = () => {
+    navigate("/login");
   };
 
   const handleSubmit = async (e) => {
@@ -40,7 +47,7 @@ const RegisterPage = () => {
         }
       );
       if (response.status === 200) {
-        setAlertMessage("Compte créé");
+       handleSuccess();
       } else {
         console.log(response.data);
         setAlertMessage(null);
