@@ -37,8 +37,9 @@ const App = () => {
     <AuthContext.Provider value={{ auth, setAuth }}>
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route exact path="/" element={<HomePage />} />
           <Route
+            exact
             path="/register"
             element={
               <SecurityGuard loggedRedirectionPath="/">
@@ -47,6 +48,7 @@ const App = () => {
             }
           />
           <Route
+            exact
             path="/login"
             element={
               <SecurityGuard loggedRedirectionPath="/">
@@ -55,17 +57,19 @@ const App = () => {
             }
           />
           <Route
-            path="/addProduct"
+            exact
+            path="/dashboard/product/form"
             element={
-              // <SecurityGuard loggedRedirectionPath="/">
-              <AddProductPage />
-              // </SecurityGuard>
+              <SecurityGuard adminRedirectionPath="/">
+                <AddProductPage />
+              </SecurityGuard>
             }
           />
           <Route
-            path="/admin"
+            exact
+            path="/dashboard"
             element={
-              <SecurityGuard>
+              <SecurityGuard adminRedirectionPath="/">
                 <AdminPage />
               </SecurityGuard>
             }
