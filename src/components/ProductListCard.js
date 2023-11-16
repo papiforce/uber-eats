@@ -1,4 +1,4 @@
-import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faEye, faEyeSlash, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, ButtonGroup } from "@material-tailwind/react";
 import { queryClient } from "../index";
@@ -18,6 +18,7 @@ export default function ProductListCard({ product }) {
     time: product.time,
     photo: product.photo,
     type: product.type,
+    quantity: product.quantity,
     isAvailable: product.isAvailable,
   });
 
@@ -31,6 +32,7 @@ export default function ProductListCard({ product }) {
       time: product.time,
       photo: product.photo,
       type: product.type,
+      quantity: product.quantity,
       isAvailable: product.isAvailable,
     });
     setOpenEdit(true);
@@ -88,7 +90,17 @@ export default function ProductListCard({ product }) {
           </p>
         </div>
         <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-          {product.price}
+          <ul>
+            <li className="mt-2">Prix : {product.price} </li>
+            <li className="mt-2">Quantité : {product.quantity} </li>
+            <li className="text-center fs-4 mt-2">
+              {product.isAvailable ? (
+                <FontAwesomeIcon icon={faEye} />
+              ) : (
+                <FontAwesomeIcon icon={faEyeSlash} />
+              )}
+            </li>
+          </ul>
         </div>
       </div>
       <div className="flex flex-row justify-center px-5">
@@ -330,6 +342,26 @@ export default function ProductListCard({ product }) {
                               <option value="MEAL">Repas</option>
                               <option value="DESSERT">Dessert</option>
                             </select>
+                          </div>
+                          <div className="mt-4">
+                            <label
+                              htmlFor="price"
+                              className="block text-gray-600 text-start text-sm font-medium mb-1"
+                            >
+                              Quantité
+                            </label>
+                            <input
+                              type="number"
+                              value={editedProduct.quantity}
+                              className="border border-gray-300  rounded-md text-dark w-100 focus:outline-none  p-2 mr-2"
+                              onChange={(e) =>
+                                setEditedProduct({
+                                  ...editedProduct,
+                                  quantity: e.target.value,
+                                })
+                              }
+                              // Ajoutez d'autres champs en fonction de votre modèle de données
+                            />
                           </div>
                           <div className="mt-4 text-start">
                             <label class="relative inline-flex items-center mb-5 cursor-pointer">
