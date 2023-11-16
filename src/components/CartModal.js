@@ -1,68 +1,15 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
-export default function CartModal({ isOpen, onClose, cartItems }) {
-  const cancelButtonRef = useRef(null);
-
-  const [currentCartItems, setCurrentCartItems] = useState(cartItems);
-
-  const [quantities, setQuantities] = useState(() => {
-    const initialQuantities = {};
-    cartItems.forEach((item) => {
-      initialQuantities[item.productId] = item.quantity || 1;
-    });
-    return initialQuantities;
-  });
-
-  useEffect(() => {
-    setQuantities((prevQuantities) => {
-      const updatedQuantities = {};
-      cartItems.forEach((item) => {
-        updatedQuantities[item.productId] = item.quantity || 1;
-      });
-      return updatedQuantities;
-    });
-  }, [isOpen, cartItems]);
-
-  const handleIncrement = (productId) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: (prevQuantities[productId] || 0) + 1,
-    }));
-  };
-
-  const handleDecrement = (productId) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: Math.max((prevQuantities[productId] || 0) - 1, 1),
-    }));
-  };
-
-const handleRemove = (productId) => {
-  // Mise à jour du local storage avec les quantités actuelles après suppression
-  const updatedCart = cartItems.filter((item) => item.productId !== productId);
-  localStorage.setItem("cart", JSON.stringify(updatedCart));
-
-  // Mise à jour des quantités sans dépendre de l'état actuel de cartItems
-  setQuantities((prevQuantities) => {
-    const { [productId]: removedItem, ...rest } = prevQuantities;
-    return rest;
-  });
-
-  // Mise à jour de la liste actuelle des produits dans le panier
-  setCurrentCartItems(updatedCart);
-};
+const CartModal = ({ isOpen, onClose, cartItems, onHandleCart }) => {
+  const navigate = useNavigate();
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-10"
-        initialFocus={cancelButtonRef}
-        onClose={onClose}
-      >
+      <Dialog as="div" className="relative z-10" onClose={onClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -91,52 +38,54 @@ const handleRemove = (productId) => {
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <div className="mt-2 p-0">
                       <ul>
-                        {currentCartItems.map((item, index) => (
-                          <li className="mt-4" key={index}>
-                            <div className="flex">
-                              <div className="flex-auto m-auto w-56">
-                                <img
-                                  src={item.productPhoto}
-                                  alt={item.productName}
-                                  className="w-full m-auto rounded-t-md"
-                                  style={{ filter: "revert" }}
-                                />
-                              </div>
+                        {cartItems.map((item, idx) => {
+                          return (
+                            <li className="mt-4" key={idx}>
+                              <div className="flex">
+                                <div className="flex-auto m-auto w-56">
+                                  <img
+                                    src={item.photo}
+                                    alt={item.name}
+                                    className="w-full m-auto rounded-t-md"
+                                    style={{ filter: "revert" }}
+                                  />
+                                </div>
 
-                              <div className="m-auto fw-bold  w-75">
-                                {item.productName}
-                              </div>
-                              <div className="m-auto w-100">
-                                <button
-                                  className="bg-black text-white px-4 py-2 rounded-l-md"
-                                  onClick={() =>
-                                    handleDecrement(item.productId)
-                                  }
-                                >
-                                  -
-                                </button>
-                                <span className="px-4">
-                                  {quantities[item.productId] || 1}
-                                </span>
-                                <button
-                                  className="bg-black text-white px-4 py-2 rounded-r-md"
-                                  onClick={() =>
-                                    handleIncrement(item.productId)
-                                  }
-                                >
-                                  +
-                                </button>
+                                <div className="m-auto fw-bold  w-75">
+                                  {item.name}
+                                </div>
+                                <div className="m-auto w-100">
+                                  <button
+                                    className="bg-black text-white px-4 py-2 rounded-l-md"
+                                    onClick={() =>
+                                      onHandleCart("LESS", item.id)
+                                    }
+                                  >
+                                    -
+                                  </button>
+                                  <span className="px-4">{item.quantity}</span>
+                                  <button
+                                    className="bg-black text-white px-4 py-2 rounded-r-md"
+                                    onClick={() =>
+                                      onHandleCart("MORE", item.id)
+                                    }
+                                  >
+                                    +
+                                  </button>
 
-                                <button
-                                  className="bg-red-500 ms-2 mt-2 m-auto text-white px-4 py-2 rounded-md ml-4"
-                                  onClick={() => handleRemove(item.productId)}
-                                >
-                                  <FontAwesomeIcon icon={faTrashCan} />
-                                </button>
+                                  <button
+                                    className="bg-red-500 ms-2 mt-2 m-auto text-white px-4 py-2 rounded-md ml-4"
+                                    onClick={() =>
+                                      onHandleCart("REMOVE", item.id)
+                                    }
+                                  >
+                                    <FontAwesomeIcon icon={faTrashCan} />
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          </li>
-                        ))}
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   </div>
@@ -145,17 +94,16 @@ const handleRemove = (productId) => {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                    onClick={() => onClose(false)}
+                    onClick={() => navigate(`/payment`)}
                   >
-                    Valider
+                    Payer
                   </button>
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     onClick={() => onClose(false)}
-                    ref={cancelButtonRef}
                   >
-                    Retour
+                    Fermer
                   </button>
                 </div>
               </Dialog.Panel>
@@ -165,4 +113,6 @@ const handleRemove = (productId) => {
       </Dialog>
     </Transition.Root>
   );
-}
+};
+
+export default CartModal;

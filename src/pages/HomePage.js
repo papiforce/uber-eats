@@ -14,51 +14,29 @@ const HomePage = () => {
     setProducts(payload);
   };
 
-  useGetMenu(onSuccess);
+  useGetMenu("?onlyActive=true", onSuccess);
 
   const addToCart = (product) => {
-    const cart = localStorage.getItem(`cart-${auth.user._id}`);
+    const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
+    const cart = localStorage.getItem(isLogged);
 
     if (!cart)
-      return localStorage.setItem(
-        `cart-${auth.user._id}`,
-        JSON.stringify({
-          userId: auth.user._id,
-          productIds: [{ productId: product._id, product }],
-          address: auth.user.address ?? "",
-        })
-      );
+      return localStorage.setItem(isLogged, JSON.stringify([{ ...product }]));
 
     const parseCart = JSON.parse(cart);
-    const { productIds } = parseCart;
 
-    const productInCart = productIds.find(
-      (subItem) => subItem.itemId === product._id
+    const productInCart = parseCart.find(
+      (subItem) => subItem.id === product.id
     );
 
     if (productInCart) {
-      productInCart.product.quantity += product.quantity;
-      productIds[productIds.indexOf(productInCart)] = productInCart;
-
-      const updatedCart = { ...parseCart, productIds };
-
-      return localStorage.setItem(
-        `cart-${auth.user._id}`,
-        JSON.stringify(updatedCart)
-      );
+      productInCart.quantity += product.quantity;
+      parseCart[parseCart.indexOf(productInCart)] = productInCart;
+    } else {
+      parseCart.push(product);
     }
 
-    productIds.push({
-      productId: product._id,
-      product,
-    });
-
-    const updatedCart = { ...parseCart, productIds };
-
-    return localStorage.setItem(
-      `cart-${auth.user._id}`,
-      JSON.stringify(updatedCart)
-    );
+    return localStorage.setItem(isLogged, JSON.stringify(parseCart));
   };
 
   return (

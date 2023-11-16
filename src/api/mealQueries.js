@@ -1,7 +1,7 @@
 import { axiosInstance } from "./axiosInstance";
 import { useQuery, useMutation } from "react-query";
 
-const getMenu = async (options = "?onlyActive=true") => {
+const getMenu = async (options) => {
   const { data } = await axiosInstance.get(`/meals${options}`);
 
   return data;
@@ -28,8 +28,8 @@ const deleteMeal = async (mealId) => {
   return data;
 };
 
-export const useGetMenu = (onSuccess) => {
-  return useQuery("menu", getMenu, {
+export const useGetMenu = (options, onSuccess) => {
+  return useQuery("menu", () => getMenu(options), {
     onSuccess,
   });
 };

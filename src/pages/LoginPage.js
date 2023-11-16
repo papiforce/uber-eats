@@ -20,6 +20,13 @@ const LoginPage = () => {
     Cookies.set("fe-token", payload.token, { expires: 31 });
     setAuth({ isAuthenticated: true, user: payload.user });
 
+    const cart = localStorage.getItem("cart");
+
+    if (cart) {
+      localStorage.setItem(`cart-${payload.user._id}`, cart);
+      localStorage.removeItem("cart");
+    }
+
     navigate("/");
   };
 

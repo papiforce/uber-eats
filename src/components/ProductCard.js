@@ -50,6 +50,7 @@ const ProductCard = ({ product, onClick }) => {
               name: product.name,
               price: product.price,
               time: product.time,
+              id: product._id,
               quantity,
             });
           }}
