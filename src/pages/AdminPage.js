@@ -14,10 +14,10 @@ export default function AdminPage() {
   return (
     <>
       <Layout>
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-5">
           <div class="bg-white p-6 rounded-md w-7/12">
             {auth.isAuthenticated && (
-              <h1 class="text-2xl font-semibold mb-4">
+              <h1 class="text-2xl sm:text-center text-start font-semibold mb-4">
                 Bonjour {auth.user.firstname}
               </h1>
             )}
@@ -26,7 +26,7 @@ export default function AdminPage() {
 
         <div class="max-w-1xl mx-auto lg:flex lg:justify-center">
           <div
-            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
+            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow mr-4"
             onClick={() => navigate("/dashboard/products")}
           >
             <FontAwesomeIcon className="fs-3" icon={faPenToSquare} />
@@ -34,7 +34,7 @@ export default function AdminPage() {
           </div>
 
           <div
-            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
+            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow mr-4"
             onClick={() => navigate("/dashboard/product/form")}
           >
             <FontAwesomeIcon className="fs-3" icon={faPlus} />
@@ -42,7 +42,7 @@ export default function AdminPage() {
           </div>
 
           <div
-            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
+            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow mr-4"
             onClick={() => navigate("/dashboard/users")}
           >
             <FontAwesomeIcon className="fs-3" icon={faUser} />
