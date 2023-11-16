@@ -10,22 +10,34 @@ export default function ProductListCard({ product }) {
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
 
+
   const [editedProduct, setEditedProduct] = useState({
     name: product.name,
     description: product.description,
     price: product.price,
+    time: product.time,
+    photo: product.photo,
+    type: product.type,
+    isAvailable: product.isAvailable,
   });
 
+
   const handleOpenEdit = () => {
+    
     setEditedProduct({
       name: product.name,
       description: product.description,
       price: product.price,
       time: product.time,
       photo: product.photo,
+      type: product.type,
+      isAvailable: product.isAvailable,
     });
     setOpenEdit(true);
   };
+
+
+  console.log("data:", setEditedProduct);
   const cancelButtonRef = useRef(null);
 
   const onDeleteMealSuccess = () => {
@@ -46,7 +58,7 @@ export default function ProductListCard({ product }) {
   };
 
   const { mutate: mutateUpdate } = useUpdateMeal(
-    {mealId: product._id, data: editedProduct},
+    { mealId: product._id, data: editedProduct },
     onUpdateMealSuccess
   );
 
@@ -54,7 +66,6 @@ export default function ProductListCard({ product }) {
     mutateUpdate(editedProduct);
     setOpenEdit(false);
   };
-
 
   console.log(editedProduct);
   return (
@@ -189,7 +200,7 @@ export default function ProductListCard({ product }) {
                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                   <div className="bg-white pt-4 sm:p-4 sm:pb-4">
                     <div className="sm:flex sm:items-center">
-                      <div className="mt-3 w-100 text-center sm:ml-4 sm:mt-0 sm:text-start">
+                      <div className="mt-3 w-100 mx-auto text-center sm:ml-4 sm:mt-0 sm:text-start">
                         <Dialog.Title
                           as="h3"
                           className="fs-4 font-semibold leading-6 text-gray-900"
@@ -297,6 +308,48 @@ export default function ProductListCard({ product }) {
                               }
                               // Ajoutez d'autres champs en fonction de votre modèle de données
                             />
+                          </div>
+                          <div className="mt-4">
+                            <label
+                              htmlFor="type"
+                              className="block text-gray-600 text-start text-sm font-medium mb-1"
+                            >
+                              Type de produit
+                            </label>
+                            <select
+                              name="type"
+                              className="border border-gray-300 rounded-md text-dark w-100 focus:outline-none p-2 mr-2"
+                              value={editedProduct.type}
+                              onChange={(e) =>
+                                setEditedProduct({
+                                  ...editedProduct,
+                                  type: e.target.value,
+                                })
+                              }
+                            >
+                              <option value="MEAL">Repas</option>
+                              <option value="DESSERT">Dessert</option>
+                            </select>
+                          </div>
+                          <div className="mt-4 text-start">
+                            <label class="relative inline-flex items-center mb-5 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                value={editedProduct.isAvailable}
+                                class="sr-only peer"
+                                checked={editedProduct.isAvailable}
+                                onChange={() =>
+                                  setEditedProduct({
+                                    ...editedProduct,
+                                    isAvailable: !editedProduct.isAvailable,
+                                  })
+                                }
+                              />
+                              <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-black"></div>
+                              <span class="ms-3 text-sm font-medium text-gray-600 dark:text-gray-500">
+                                Visible
+                              </span>
+                            </label>
                           </div>
                         </Dialog.Description>
                       </div>

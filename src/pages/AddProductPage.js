@@ -1,24 +1,23 @@
 import { useState } from "react";
 import { useAddMeal } from "api/mealQueries";
 import Layout from "./layouts/Layout";
-  import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function AddProductPage() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: "",
-    price: "",
+    price: 0,
     description: "",
     photo: "",
-    time: "",
-    type: "MEALS",
+    time: 0,
+    type: "",
   });
   const onSuccess = () => {
-      navigate("/");
-
+    navigate("/");
   };
-  const { mutate } = useAddMeal(onSuccess);
+  const { mutate } = useAddMeal(form, onSuccess);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
