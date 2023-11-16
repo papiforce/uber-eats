@@ -124,7 +124,7 @@ export default function AddProductPage() {
               value={form.type}
               onChange={handleChange}
             >
-              <option value="MEALS">Repas</option>
+              <option value="MEAL">Repas</option>
               <option value="DESSERT">Dessert</option>
             </select>
           </div>

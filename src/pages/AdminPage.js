@@ -10,7 +10,7 @@ export default function AdminPage() {
 
   // Aller sur la page "ajouter un menu"
   const handleAddMenuClick = () => {
-    navigate("/addMenu");
+    navigate("/addProduct");
   };
 
   // Aller sur la page "Voir les menus"
