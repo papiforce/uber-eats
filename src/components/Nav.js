@@ -73,10 +73,6 @@ const Nav = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCartModalOpen]);
 
-  const handleAdminClick = () => {
-    navigate("/admin");
-  };
-
   useEffect(() => {
     window.addEventListener(
       "resize",
@@ -138,7 +134,7 @@ const Nav = () => {
                   <Button
                     size="sm"
                     className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
-                    onClick={handleAdminClick}
+                    onClick={() => navigate("/dashboard")}
                   >
                     <FontAwesomeIcon icon={faUser} />
                     <span> Admin </span>
@@ -217,7 +213,7 @@ const Nav = () => {
                 <Button
                   size="sm"
                   className="bg-white text-black border w-full"
-                  onClick={handleAdminClick}
+                  onClick={() => navigate("/dashboard")}
                 >
                   <FontAwesomeIcon icon={faUser} />
                   <span> Admin </span>
