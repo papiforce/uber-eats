@@ -1,18 +1,32 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "contexts/AuthContext";
 
 
 import Layout from './layouts/Layout';
 
 
 export default function CheckoutPage() {
+  const { auth } = useContext(AuthContext);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const [order, setOrder] = useState([]);
+
+
+  // const navigate = useNavigate();
   
+  useEffect(() => {
+    const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
+    const orderData = JSON.parse(localStorage.getItem(isLogged));
+    setOrder(orderData)
+  }, []);
+
+
   const openModal = () => {
     setIsModalOpen(true);
     setIsLoading(true);
+    console.log(order)
 
     // Simuler un chargement avec un délai de 2 secondes 
     setTimeout(() => {
@@ -20,14 +34,30 @@ export default function CheckoutPage() {
     }, 2000);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  // };
+
+  // Calculer le prix total
+  const calculateTotal = () => {
+    let subtotal = 0;
+
+    order.forEach(item => {
+      subtotal += item.price * item.quantity;
+    });
+
+    let shippingFee = 2.99;
+
+    // Si le sous-total est supérieur à 20, la livraison est gratuite
+    if (subtotal > 20) {
+      shippingFee = 0;
+    }
+
+    const total = subtotal + shippingFee;
+
+    return total.toFixed(2);
   };
 
-  useEffect(() => {
-    // Redirection vers la page souhaitée lorsque isLoading passe de true à false
-
-  }, [isLoading, isModalOpen, navigate]);
  
   return (
     <>
@@ -36,34 +66,22 @@ export default function CheckoutPage() {
         <div class="px-4 pt-8">
           <p class="text-xl font-medium">Votre commande :</p>
           <div class="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-            <div class="flex flex-col rounded-lg bg-white sm:flex-row">
-              <img
-                class="m-2 h-24 w-28 rounded-md border object-cover object-center"
-                src="https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                alt=""
-              />
-              <div class="flex w-full flex-col px-4 py-4">
-                <span class="font-semibold">
-                  Nike Air Max Pro 8888 - Super Light
-                </span>
-                <span class="float-right text-gray-400">42EU - 8.5US</span>
-                <p class="text-lg font-bold">$138.99</p>
-              </div>
+          {order.map(item => (
+          <div key={item.id} class="flex flex-col rounded-lg bg-white sm:flex-row">
+            <img
+              class="m-2 h-24 w-28 rounded-md border object-cover object-center"
+              src={item.photo}
+              alt=""
+            />
+            <div class="flex w-full flex-col px-4 py-4">
+              <span class="font-semibold">
+                {item.name}
+              </span>
+              <span class="float-right text-gray-400">Quantité : {item.quantity}</span>
+              <p class="text-lg font-bold">{`${(item.price * item.quantity).toFixed(2)} `} €</p>
             </div>
-            <div class="flex flex-col rounded-lg bg-white sm:flex-row">
-              <img
-                class="m-2 h-24 w-28 rounded-md border object-cover object-center"
-                src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                alt=""
-              />
-              <div class="flex w-full flex-col px-4 py-4">
-                <span class="font-semibold">
-                  Nike Air Max Pro 8888 - Super Light
-                </span>
-                <span class="float-right text-gray-400">42EU - 8.5US</span>
-                <p class="mt-auto text-lg font-bold">$238.99</p>
-              </div>
-            </div>
+          </div>
+          ))}
           </div>
         </div>
         <div class="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
@@ -163,16 +181,20 @@ export default function CheckoutPage() {
             <div class="mt-6 border-t border-b py-2">
               <div class="flex items-center justify-between">
                 <p class="text-sm font-medium text-gray-900">Sous-total</p>
-                <p class="font-semibold text-gray-900">399.00€</p>
+                <p class="font-semibold text-gray-900">{`${calculateTotal()} €`}</p>
               </div>
               <div class="flex items-center justify-between">
                 <p class="text-sm font-medium text-gray-900">Livraison</p>
-                <p class="font-semibold text-gray-900">8.00€</p>
+                {calculateTotal() > 20 ? (
+                <p class="font-semibold text-gray-900">Gratuit</p>
+              ) : (
+                <p class="font-semibold text-gray-900">{`2.99 €`}</p>
+                )}
               </div>
             </div>
             <div class="mt-6 flex items-center justify-between">
               <p class="text-sm font-medium text-gray-900">Total</p>
-              <p class="text-2xl font-semibold text-gray-900">408.00€</p>
+              <p class="text-2xl font-semibold text-gray-900">{`${calculateTotal()} €`}</p>
             </div>
           </div>
           <button 
