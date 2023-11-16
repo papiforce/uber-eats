@@ -80,7 +80,7 @@ const App = () => {
             exact
             path="/payment"
             element={
-              <SecurityGuard adminRedirectionPath="/">
+              <SecurityGuard unloggedRedirectionPath="/">
                 <CheckoutPage />
               </SecurityGuard>
             }

@@ -1,14 +1,42 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "contexts/AuthContext";
+import axios from "axios";
+import { useCreateOrder } from "api/orderQueries";
+import { useNavigate } from "react-router-dom";
+
 
 import Layout from "./layouts/Layout";
 
 const CheckoutPage = () => {
   const { auth } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [order, setOrder] = useState([]);
+  const [orderCart, setOrderCart] = useState([]);
+
+  const [order, setOrder] = useState({
+    customerId: "",
+    address: {
+      address: "",
+      coordonates: {
+        lat: 0,
+        long: 0,
+      },
+    },
+    deliveryPersonId: "",
+    content: [
+      {
+        name: "",
+        price: 0,
+        photo: "",
+        quantity: 0,
+      },
+    ],
+    totalPrice: 0,
+    status: "FREE",
+    code: "",
+  });
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -19,14 +47,75 @@ const CheckoutPage = () => {
     }, 2000);
   };
 
-  // const closeModal = () => {
-  //   setIsModalOpen(false);
-  // };
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    // Si le champ modifié est contenu dans le tableau 'content'
+    if (name.startsWith("content.")) {
+      const [_, index, fieldName] = name.split("."); // Ignorer la première partie et obtenir l'index et le nom du champ
+      const contentIndex = parseInt(index, 10); // Convertir l'index en nombre entier
+
+      setOrder((prevOrder) => {
+        const updatedContent = [...prevOrder.content]; // Créer une copie du tableau 'content'
+        updatedContent[contentIndex] = {
+          ...updatedContent[contentIndex],
+          [fieldName]: value,
+        };
+
+        return {
+          ...prevOrder,
+          content: updatedContent,
+        };
+      });
+    } else {
+      setOrder({
+        ...order,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      // Effectuer la requête POST avec Axios
+      const response = await axios.post(
+        "http://localhost:4400/api/orders/add",
+        order
+      );
+
+      // Traiter la réponse ici (par exemple, afficher un message de succès)
+      console.log("Réponse de la requête POST:", response.data);
+
+      // Réinitialiser l'état de la commande ou effectuer toute autre action nécessaire après la soumission
+      setOrder({
+        customerId: "",
+        address: {
+          address: "",
+          coordonates: {
+            lat: 0,
+            long: 0,
+          },
+        },
+        deliveryPersonId: "",
+        content: [],
+        totalPrice: 0,
+        status: "FREE",
+        code: "",
+      });
+
+      // Fermer éventuellement le modal ou effectuer d'autres actions
+      setIsModalOpen(false);
+      navigate("/"); // Rediriger vers la page d'accueil après la soumission avec succès
+    } catch (error) {
+      // Gérer les erreurs ici (par exemple, afficher un message d'erreur)
+      console.error("Erreur lors de la requête POST:", error);
+    }
+  };
 
   const calculateTotal = () => {
     let subtotal = 0;
 
-    order.forEach((item) => {
+    orderCart.forEach((item) => {
       subtotal += item.price * item.quantity;
     });
 
@@ -44,7 +133,7 @@ const CheckoutPage = () => {
   useEffect(() => {
     const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
     const orderData = JSON.parse(localStorage.getItem(isLogged));
-    setOrder(orderData);
+    setOrderCart(orderData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -54,7 +143,7 @@ const CheckoutPage = () => {
         <div class="px-4 pt-8">
           <p class="text-xl font-medium">Votre commande :</p>
           <div class="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-            {order.map((item) => (
+            {orderCart.map((item, index) => (
               <div
                 key={item.id}
                 class="flex flex-col rounded-lg bg-white sm:flex-row"
@@ -62,14 +151,23 @@ const CheckoutPage = () => {
                 <img
                   class="m-2 h-24 w-28 rounded-md border object-cover object-center"
                   src={item.photo}
-                  alt=""
+                  alt="img"
+                  value={order.content[index]?.photo || ""}
+                  onChange={handleChange}
                 />
                 <div class="flex w-full flex-col px-4 py-4">
-                  <span class="font-semibold">{item.name}</span>
-                  <span class="float-right text-gray-400">
+                  <span class="font-semibold"
+                    value={order.content[index]?.name || ""}
+                    onChange={handleChange}
+                  >{item.name}</span>
+                  <span class="float-right text-gray-400"
+                        value={order.content[index]?.quantity || ""}
+                        onChange={handleChange}>
                     Quantité : {item.quantity}
                   </span>
-                  <p class="text-lg font-bold">
+                  <p class="text-lg font-bold"
+                    value={order.content[index]?.price || ""}
+                    onChange={handleChange}>
                     {`${(item.price * item.quantity).toFixed(2)} `} €
                   </p>
                 </div>
@@ -191,7 +289,7 @@ const CheckoutPage = () => {
             </div>
           </div>
           <button
-            onClick={openModal}
+            onClick={handleSubmit}
             class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
           >
             Commander
