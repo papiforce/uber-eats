@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Navbar,
   MobileNav,
@@ -8,14 +8,17 @@ import {
 } from "@material-tailwind/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import CartModal from "./CartModal"; // Adjust the path based on your project structure
 
+import { AuthContext } from "contexts/AuthContext";
+
 export default function Nav() {
-  const [openNav, setOpenNav] = React.useState(false);
+  const { auth } = useContext(AuthContext);
+
+  const [openNav, setOpenNav] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -25,24 +28,19 @@ export default function Nav() {
   };
 
   const handleRegisterClick = () => {
-    // Naviguer vers la page d'inscription
-    navigate("/Registration");
+    navigate("/register");
   };
 
   const handleLoginClick = () => {
-    // Naviguer vers la page connexion
     navigate("/login");
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
   }, []);
-
-  const isRegistrationPage = location.pathname === "/Registration";
-  const isLoginPage = location.pathname === "/login";
 
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -68,11 +66,13 @@ export default function Nav() {
             <Button
               size="sm"
               className="bg-transparant text-dark rounded-full"
-              onClick={toggleCartModal}
+              onClick={
+                !auth.isAuthenticated ? handleLoginClick : toggleCartModal
+              }
             >
               <FontAwesomeIcon icon={faCartShopping} />
             </Button>
-            {!isRegistrationPage && !isLoginPage && (
+            {!auth.isAuthenticated ? (
               <div className="flex items-center gap-x-1">
                 <Button
                   size="sm"
@@ -92,18 +92,66 @@ export default function Nav() {
                   <span>Inscription</span>
                 </Button>
               </div>
+            ) : (
+              <>{/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}</>
             )}
             <IconButton
               variant="text"
-              className="ml-auto h-6 w-6 text-inherit  active:bg-transparent lg:hidden"
+              className="ml-auto h-6 w-6 text-inherit active:bg-transparent lg:hidden"
               ripple={false}
               onClick={() => setOpenNav(!openNav)}
             >
-              {/* Your icon code goes here */}
+              <div className="HAMBURGER-ICON space-y-2">
+                {!openNav && (
+                  <>
+                    <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
+                    <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
+                    <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
+                  </>
+                )}
+                {openNav && (
+                  <>
+                    <svg
+                      className="h-8 w-8 text-gray-600"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </>
+                )}
+              </div>
             </IconButton>
           </div>
         </div>
-        <MobileNav open={openNav}></MobileNav>
+        <MobileNav open={openNav}>
+          {!auth.isAuthenticated ? (
+            <>
+              <Button
+                size="sm"
+                className="bg-white text-black border w-full"
+                onClick={handleLoginClick}
+              >
+                <FontAwesomeIcon icon={faUser} />
+                <span> Connexion</span>
+              </Button>
+              <Button
+                variant="sm"
+                className="bg-white text-black border w-full"
+                onClick={handleRegisterClick}
+              >
+                <span>Inscription</span>
+              </Button>
+            </>
+          ) : (
+            <>{/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}</>
+          )}
+        </MobileNav>
       </Navbar>
 
       <CartModal
