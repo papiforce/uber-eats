@@ -75,12 +75,12 @@ const App = () => {
               </SecurityGuard>
             }
           />
-             <Route
-            path="/ProductList"
+          <Route
+            path="/dashboard/products"
             element={
-              // <SecurityGuard loggedRedirectionPath="/">
+              <SecurityGuard adminRedirectionPath="/">
                 <ProductListPage />
-              // </SecurityGuard>
+              </SecurityGuard>
             }
           />
         </Routes>
