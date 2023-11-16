@@ -1,34 +1,19 @@
-import React, {useState, useEffect, useContext} from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "contexts/AuthContext";
 
+import Layout from "./layouts/Layout";
 
-import Layout from './layouts/Layout';
-
-
-export default function CheckoutPage() {
+const CheckoutPage = () => {
   const { auth } = useContext(AuthContext);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [order, setOrder] = useState([]);
 
-
-  // const navigate = useNavigate();
-  
-  useEffect(() => {
-    const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
-    const orderData = JSON.parse(localStorage.getItem(isLogged));
-    setOrder(orderData)
-  }, []);
-
-
   const openModal = () => {
     setIsModalOpen(true);
     setIsLoading(true);
-    console.log(order)
 
-    // Simuler un chargement avec un délai de 2 secondes 
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -38,18 +23,16 @@ export default function CheckoutPage() {
   //   setIsModalOpen(false);
   // };
 
-  // Calculer le prix total
   const calculateTotal = () => {
     let subtotal = 0;
 
-    order.forEach(item => {
+    order.forEach((item) => {
       subtotal += item.price * item.quantity;
     });
 
     let shippingFee = 2.99;
 
-    // Si le sous-total est supérieur à 20, la livraison est gratuite
-    if (subtotal > 20) {
+    if (subtotal > 19.99) {
       shippingFee = 0;
     }
 
@@ -58,30 +41,40 @@ export default function CheckoutPage() {
     return total.toFixed(2);
   };
 
- 
+  useEffect(() => {
+    const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
+    const orderData = JSON.parse(localStorage.getItem(isLogged));
+    setOrder(orderData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <>
-      <Layout /> 
+    <Layout title="Express Food | Paiement">
       <div class="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
         <div class="px-4 pt-8">
           <p class="text-xl font-medium">Votre commande :</p>
           <div class="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-          {order.map(item => (
-          <div key={item.id} class="flex flex-col rounded-lg bg-white sm:flex-row">
-            <img
-              class="m-2 h-24 w-28 rounded-md border object-cover object-center"
-              src={item.photo}
-              alt=""
-            />
-            <div class="flex w-full flex-col px-4 py-4">
-              <span class="font-semibold">
-                {item.name}
-              </span>
-              <span class="float-right text-gray-400">Quantité : {item.quantity}</span>
-              <p class="text-lg font-bold">{`${(item.price * item.quantity).toFixed(2)} `} €</p>
-            </div>
-          </div>
-          ))}
+            {order.map((item) => (
+              <div
+                key={item.id}
+                class="flex flex-col rounded-lg bg-white sm:flex-row"
+              >
+                <img
+                  class="m-2 h-24 w-28 rounded-md border object-cover object-center"
+                  src={item.photo}
+                  alt=""
+                />
+                <div class="flex w-full flex-col px-4 py-4">
+                  <span class="font-semibold">{item.name}</span>
+                  <span class="float-right text-gray-400">
+                    Quantité : {item.quantity}
+                  </span>
+                  <p class="text-lg font-bold">
+                    {`${(item.price * item.quantity).toFixed(2)} `} €
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <div class="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
@@ -95,14 +88,14 @@ export default function CheckoutPage() {
             </label>
             <div class="relative">
               <input
-                  type="text"
-                  id="card-no"
-                  name="card-no"
-                  class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="Email"
-                  required
-                />            
-                </div>
+                type="text"
+                id="card-no"
+                name="card-no"
+                class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                placeholder="Email"
+                required
+              />
+            </div>
             <label
               for="card-holder"
               class="mt-4 mb-2 block text-sm font-medium"
@@ -120,7 +113,7 @@ export default function CheckoutPage() {
               />
             </div>
             <label for="card-no" class="mt-4 mb-2 block text-sm font-medium">
-            Informations de la carte
+              Informations de la carte
             </label>
             <div class="flex">
               <div class="relative w-7/12 flex-shrink-0">
@@ -186,9 +179,9 @@ export default function CheckoutPage() {
               <div class="flex items-center justify-between">
                 <p class="text-sm font-medium text-gray-900">Livraison</p>
                 {calculateTotal() > 20 ? (
-                <p class="font-semibold text-gray-900">Gratuit</p>
-              ) : (
-                <p class="font-semibold text-gray-900">{`2.99 €`}</p>
+                  <p class="font-semibold text-gray-900">Gratuit</p>
+                ) : (
+                  <p class="font-semibold text-gray-900">{`2.99 €`}</p>
                 )}
               </div>
             </div>
@@ -197,9 +190,10 @@ export default function CheckoutPage() {
               <p class="text-2xl font-semibold text-gray-900">{`${calculateTotal()} €`}</p>
             </div>
           </div>
-          <button 
+          <button
             onClick={openModal}
-            class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">
+            class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
+          >
             Commander
           </button>
         </div>
@@ -212,12 +206,17 @@ export default function CheckoutPage() {
               <p className="text-center">Chargement en cours...</p>
             ) : (
               <div>
-                <h2 className="text-2xl text-center  font-semibold mb-4">Votre paiement a été confirmé, <br></br> redirection en cours...</h2>
+                <h2 className="text-2xl text-center  font-semibold mb-4">
+                  Votre paiement a été confirmé, <br></br> redirection en
+                  cours...
+                </h2>
               </div>
             )}
           </div>
         </div>
       )}
-    </>
+    </Layout>
   );
-}
+};
+
+export default CheckoutPage;
