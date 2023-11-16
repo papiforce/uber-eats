@@ -34,8 +34,8 @@ export const useGetMenu = (options, onSuccess) => {
   });
 };
 
-export const useAddMeal = (onSuccess) => {
-  return useMutation(addMeal, { onSuccess });
+export const useAddMeal = (data, onSuccess) => {
+  return useMutation(() => addMeal(data), { onSuccess });
 };
 
 export const useUpdateMeal = ({ mealId, data }, onSuccess, onError) => {

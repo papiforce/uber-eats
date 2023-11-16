@@ -11,21 +11,6 @@ export default function AdminPage() {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Aller sur la page "ajouter un menu"
-  const handleAddMenuClick = () => {
-    navigate("/addProduct");
-  };
-
-  // Aller sur la page "Voir les menus"
-  const handleMenuClick = () => {
-    navigate("/productList");
-  };
-
-  // Aller sur la page "Utilisateurs"
-  const handleUsersClick = () => {
-    navigate("/users");
-  };
-
   return (
     <>
       <Layout>
@@ -41,24 +26,24 @@ export default function AdminPage() {
 
         <div class="max-w-1xl mx-auto lg:flex lg:justify-center">
           <div
-            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow mr-4"
-            onClick={handleMenuClick}
+            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
+            onClick={() => navigate("/dashboard/products")}
           >
             <FontAwesomeIcon className="fs-3" icon={faPenToSquare} />
             <h2 class="text-xl font-semibold mb-2">Voir les menus</h2>
           </div>
 
           <div
-            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow mr-4"
-            onClick={handleAddMenuClick}
+            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
+            onClick={() => navigate("/dashboard/product/form")}
           >
             <FontAwesomeIcon className="fs-3" icon={faPlus} />
             <h2 class="text-xl font-semibold mb-2">Ajouter un nouveau menu</h2>
           </div>
 
           <div
-            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow mr-4"
-            onClick={handleUsersClick}
+            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
+            onClick={() => navigate("/dashboard/users")}
           >
             <FontAwesomeIcon className="fs-3" icon={faUser} />
             <h2 class="text-xl font-semibold mb-2">Voir les utilisateurs</h2>

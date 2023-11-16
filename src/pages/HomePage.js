@@ -1,12 +1,13 @@
-// HomePage.js
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SearchFood from "../components/SearchFood";
 import Layout from "./layouts/Layout";
 import { useGetMenu } from "api/mealQueries";
 import ProductCard from "../components/ProductCard";
+import { AuthContext } from "contexts/AuthContext";
 
 const HomePage = () => {
-  const [quantities, setQuantities] = useState({});
+  const { auth } = useContext(AuthContext);
+
   const [products, setProducts] = useState([]);
 
   const onSuccess = (payload) => {
@@ -15,18 +16,27 @@ const HomePage = () => {
 
   useGetMenu("?onlyActive=true", onSuccess);
 
-  const handleIncrement = (productId) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: (prevQuantities[productId] || 0) + 1,
-    }));
-  };
+  const addToCart = (product) => {
+    const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
+    const cart = localStorage.getItem(isLogged);
 
-  const handleDecrement = (productId) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: Math.max((prevQuantities[productId] || 0) - 1, 0),
-    }));
+    if (!cart)
+      return localStorage.setItem(isLogged, JSON.stringify([{ ...product }]));
+
+    const parseCart = JSON.parse(cart);
+
+    const productInCart = parseCart.find(
+      (subItem) => subItem.id === product.id
+    );
+
+    if (productInCart) {
+      productInCart.quantity += product.quantity;
+      parseCart[parseCart.indexOf(productInCart)] = productInCart;
+    } else {
+      parseCart.push(product);
+    }
+
+    return localStorage.setItem(isLogged, JSON.stringify(parseCart));
   };
 
   return (
@@ -39,9 +49,7 @@ const HomePage = () => {
             <ProductCard
               key={product._id}
               product={product}
-              onDecrement={handleDecrement}
-              onIncrement={handleIncrement}
-              quantity={quantities[product._id] || 0}
+              onClick={(product) => addToCart(product)}
             />
           ))}
         </div>
