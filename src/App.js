@@ -14,6 +14,8 @@ import LoginPage from "pages/LoginPage";
 import AddProductPage from "pages/AddProductPage";
 import AdminPage from "pages/AdminPage";
 import ProductListPage from "pages/ProductListPage";
+import DeliveryPage from "pages/DeliveryPage";
+import FreeOrdersPage from "pages/FreeOrdersPage";
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -63,6 +65,23 @@ const App = () => {
             element={
               <SecurityGuard adminRedirectionPath="/">
                 <AddProductPage />
+              </SecurityGuard>
+            }
+          />
+          <Route
+            exact
+            path="/delivery_dashboard"
+            element={
+              <SecurityGuard deliveryRedirectionPath="/">
+                <DeliveryPage />
+              </SecurityGuard>
+            }
+          />
+          <Route
+            path="/delivery_dashboard/freeorders"
+            element={
+              <SecurityGuard deliveryRedirectionPath="/">
+                <FreeOrdersPage />
               </SecurityGuard>
             }
           />

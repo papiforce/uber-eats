@@ -7,7 +7,7 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { faUser,faListAlt } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import CartModal from "./CartModal";
@@ -138,6 +138,16 @@ const Nav = () => {
                   >
                     <FontAwesomeIcon icon={faUser} />
                     <span> Admin </span>
+                  </Button>
+                )}
+                { (auth.user.role === "ADMIN" || auth.user.role === "DELIVERY_PERSON") && (
+                  <Button
+                    size="sm"
+                    className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
+                    onClick={() => navigate("/delivery_dashboard")}
+                  >
+                    <FontAwesomeIcon icon={faListAlt} />
+                    <span> Liste des commandes </span>
                   </Button>
                 )}
                 <Button
