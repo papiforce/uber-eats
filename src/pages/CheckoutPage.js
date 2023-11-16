@@ -1,9 +1,34 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import { useNavigate } from "react-router-dom";
+
 
 import Layout from './layouts/Layout';
 
 
 export default function CheckoutPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  
+  const openModal = () => {
+    setIsModalOpen(true);
+    setIsLoading(true);
+
+    // Simuler un chargement avec un délai de 2 secondes 
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    // Redirection vers la page souhaitée lorsque isLoading passe de true à false
+
+  }, [isLoading, isModalOpen, navigate]);
+ 
   return (
     <>
       <Layout /> 
@@ -57,6 +82,7 @@ export default function CheckoutPage() {
                   name="card-no"
                   class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Email"
+                  required
                 />            
                 </div>
             <label
@@ -72,6 +98,7 @@ export default function CheckoutPage() {
                 name="card-holder"
                 class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm  shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Votre nom"
+                required
               />
             </div>
             <label for="card-no" class="mt-4 mb-2 block text-sm font-medium">
@@ -80,11 +107,13 @@ export default function CheckoutPage() {
             <div class="flex">
               <div class="relative w-7/12 flex-shrink-0">
                 <input
-                  type="text"
+                  type="number"
                   id="card-no"
                   name="card-no"
                   class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="xxxx-xxxx-xxxx-xxxx"
+                  min="19"
+                  required
                 />
               </div>
               <input
@@ -92,12 +121,16 @@ export default function CheckoutPage() {
                 name="credit-expiry"
                 class="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="MM/YY"
+                maxlength="5"
+                required
               />
               <input
-                type="text"
+                type="number"
                 name="credit-cvc"
                 class="w-1/6 flex-shrink-0 rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="CVC"
+                maxlength="3"
+                required
               />
             </div>
             <label
@@ -114,13 +147,16 @@ export default function CheckoutPage() {
                   name="billing-address"
                   class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Adresse de livraison"
+                  required
                 />
               </div>
               <input
-                type="text"
+                type="number"
                 name="billing-zip"
                 class="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Code postal"
+                maxlength="5"
+                required
               />
             </div>
 
@@ -139,11 +175,27 @@ export default function CheckoutPage() {
               <p class="text-2xl font-semibold text-gray-900">408.00€</p>
             </div>
           </div>
-          <button class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">
+          <button 
+            onClick={openModal}
+            class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">
             Commander
           </button>
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+          <div className="bg-white p-8 w-96">
+            {isLoading ? (
+              <p className="text-center">Chargement en cours...</p>
+            ) : (
+              <div>
+                <h2 className="text-2xl text-center  font-semibold mb-4">Votre paiement a été confirmé, <br></br> redirection en cours...</h2>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }
