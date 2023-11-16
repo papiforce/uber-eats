@@ -1,12 +1,16 @@
 // HomePage.js
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { OrderContext } from "contexts/OrderContext";
 import Layout from "./layouts/Layout";
+import axios from 'axios';
 
 
 const CurrentCommand = () => {
 
   const { orderConfirmed } = useContext(OrderContext);
+  const [distance, setDistance] = useState(null);
+  const [duration, setDuration] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!orderConfirmed || !orderConfirmed.orders || orderConfirmed.orders.length === 0) {
     return (
@@ -27,6 +31,7 @@ const CurrentCommand = () => {
   const hourFormatted = date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
 
   const status = orderConfirmed.orders[0].status;
+
 
   let statusMessage;
 
@@ -50,6 +55,32 @@ const CurrentCommand = () => {
       statusMessage = "La commande a été annulée.";
       break;
   }
+
+  
+
+  const handleDistanceDuration = async () => {
+    try {
+      
+      const position = await axios.get(`http://localhost:4400/api/users/?id=${orderConfirmed.orders[0].deliveryPersonId}`);
+      const origins = `${position.data[0].address.coordonates.lat},${position.data[0].address.coordonates.long}`;
+      const destinations = `${orderConfirmed.orders[0].address.coordonates.lat},${orderConfirmed.orders[0].address.coordonates.long}`;
+      const apiKey = 'YBubBUzCmEWE0cSdLilVCwTJm8498FyLaQYBHI3DZLOugSqbco71OeswG6mjOCNP';
+      const url = `https://api.distancematrix.ai/maps/api/distancematrix/json?origins=${origins}&destinations=${destinations}&key=${apiKey}`;
+      const response = await axios.get(url);
+
+      if (response.data.status === 'OK') {
+        const distanceText = response.data.rows[0].elements[0].distance.text;
+        const durationText = response.data.rows[0].elements[0].duration.text;
+
+        setDistance(distanceText);
+        setDuration(durationText);
+      } else {
+        console.error('Erreur lors de la récupération des informations de distance et de durée');
+      }
+    } catch (error) {
+      console.error('Erreur réseau lors de la récupération des informations de distance et de durée', error);
+    }
+  };
 
 
   return (
@@ -104,23 +135,43 @@ const CurrentCommand = () => {
                 <h1 className="text-3xl font-semibold mb-4">Prix total</h1>
               </div>
               <div>
-              <h1 className="text-3xl font-semibold mb-4"> {orderConfirmed.orders[0].totalPrice} €</h1>
+                <h1 className="text-3xl font-semibold mb-4"> {orderConfirmed.orders[0].totalPrice} €</h1>
               </div>
             </div>
-            {/* Condition pour afficher le bouton modal */}
-          {["FREE", "DELIVERED", "CANCELED"].indexOf(orderConfirmed.orders[0].status) === -1 && (
-            <button>Voir emplacement du livreur</button>
-          )}
+            {orderConfirmed.orders[0].status === "PENDING_DELIVERY" && (
+              <div>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                  onClick={() => { setIsModalOpen(true); handleDistanceDuration(); }}>
+                  Voir l'emplacement du livreur
+                </button>
+                {isModalOpen && (
+                  <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+                    <div className="bg-white p-8 w-96 rounded-lg">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-shrink-0">
+                        </div>
+                        <div className="ml-3 flex-1">
+                          <p className="text-sm text-gray-500">
+                            <p>Distance {distance}</p>
+                            <p>Durée estimée {duration}</p>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-4 flex justify-end">
+                        <button onClick={() => setIsModalOpen(false)} className="mr-3 inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 active:bg-gray-200">
+                          Fermer
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-          
+
         ) : (
           <h1 className="text-3xl font-semibold mb-4">Chargement...</h1>
         )}
-
-
-
-
-        
       </div>
     </Layout>
   );
