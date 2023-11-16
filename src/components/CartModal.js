@@ -37,56 +37,62 @@ const CartModal = ({ isOpen, onClose, cartItems, onHandleCart }) => {
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <div className="mt-2 p-0">
-                      <ul>
-                        {cartItems.map((item, idx) => {
-                          return (
-                            <li className="mt-4" key={idx}>
-                              <div className="flex">
-                                <div className="flex-auto m-auto w-56">
-                                  <img
-                                    src={item.photo}
-                                    alt={item.name}
-                                    className="w-full m-auto rounded-t-md"
-                                    style={{ filter: "revert" }}
-                                  />
-                                </div>
+                      {cartItems.length > 0 ? (
+                        <ul>
+                          {cartItems.map((item, idx) => {
+                            return (
+                              <li className="mt-4" key={idx}>
+                                <div className="flex">
+                                  <div className="flex-auto m-auto w-56">
+                                    <img
+                                      src={item.photo}
+                                      alt={item.name}
+                                      className="w-full m-auto rounded-t-md"
+                                      style={{ filter: "revert" }}
+                                    />
+                                  </div>
 
-                                <div className="m-auto fw-bold  w-75">
-                                  {item.name}
-                                </div>
-                                <div className="m-auto w-100">
-                                  <button
-                                    className="bg-black text-white px-4 py-2 rounded-l-md"
-                                    onClick={() =>
-                                      onHandleCart("LESS", item.id)
-                                    }
-                                  >
-                                    -
-                                  </button>
-                                  <span className="px-4">{item.quantity}</span>
-                                  <button
-                                    className="bg-black text-white px-4 py-2 rounded-r-md"
-                                    onClick={() =>
-                                      onHandleCart("MORE", item.id)
-                                    }
-                                  >
-                                    +
-                                  </button>
+                                  <div className="m-auto fw-bold  w-75">
+                                    {item.name}
+                                  </div>
+                                  <div className="m-auto w-100">
+                                    <button
+                                      className="bg-black text-white px-4 py-2 rounded-l-md"
+                                      onClick={() =>
+                                        onHandleCart("LESS", item.id)
+                                      }
+                                    >
+                                      -
+                                    </button>
+                                    <span className="px-4">
+                                      {item.quantity}
+                                    </span>
+                                    <button
+                                      className="bg-black text-white px-4 py-2 rounded-r-md"
+                                      onClick={() =>
+                                        onHandleCart("MORE", item.id)
+                                      }
+                                    >
+                                      +
+                                    </button>
 
-                                  <button
-                                    className="bg-red-500 ms-2 mt-2 m-auto text-white px-4 py-2 rounded-md ml-4"
-                                    onClick={() =>
-                                      onHandleCart("REMOVE", item.id)
-                                    }
-                                  >
-                                    <FontAwesomeIcon icon={faTrashCan} />
-                                  </button>
+                                    <button
+                                      className="bg-red-500 ms-2 mt-2 m-auto text-white px-4 py-2 rounded-md ml-4"
+                                      onClick={() =>
+                                        onHandleCart("REMOVE", item.id)
+                                      }
+                                    >
+                                      <FontAwesomeIcon icon={faTrashCan} />
+                                    </button>
+                                  </div>
                                 </div>
-                              </div>
-                            </li>
-                          );
-                        })}
-                      </ul>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      ) : (
+                        <p>Votre panier est vide</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -95,6 +101,11 @@ const CartModal = ({ isOpen, onClose, cartItems, onHandleCart }) => {
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                     onClick={() => navigate(`/payment`)}
+                    disabled={cartItems.length === 0}
+                    style={{
+                      cursor:
+                        cartItems.length === 0 ? "not-allowed" : "pointer",
+                    }}
                   >
                     Payer
                   </button>

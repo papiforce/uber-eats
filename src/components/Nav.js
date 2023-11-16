@@ -101,17 +101,17 @@ const Nav = () => {
             <div className="mr-4 hidden lg:block">{navList}</div>
             {!auth.isAuthenticated ? (
               <div className="flex items-center gap-x-1">
-                            <Button
-              size="sm"
-              className="bg-transparant text-dark rounded-full"
-              onClick={
-                !auth.isAuthenticated
-                  ? () => navigate("/login")
-                  : () => setCartModalOpen(!isCartModalOpen)
-              }
-            >
-              <FontAwesomeIcon icon={faCartShopping} />
-            </Button>
+                <Button
+                  size="sm"
+                  className="bg-transparant text-dark rounded-full"
+                  onClick={
+                    !auth.isAuthenticated
+                      ? () => navigate("/login")
+                      : () => setCartModalOpen(!isCartModalOpen)
+                  }
+                >
+                  <FontAwesomeIcon icon={faCartShopping} />
+                </Button>
                 <Button
                   size="sm"
                   className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
@@ -131,25 +131,30 @@ const Nav = () => {
                 </Button>
               </div>
             ) : (
-              <>{/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
-              {/* Onglet ADMIN pour accèder à l'interface admin */}
+              <>
+                {/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
+                {/* Onglet ADMIN pour accèder à l'interface admin */}
                 {auth.user.role === "ADMIN" && (
-                    <Button
+                  <Button
                     size="sm"
                     className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
                     onClick={handleAdminClick}
                   >
                     <FontAwesomeIcon icon={faUser} />
                     <span> Admin </span>
-                  </Button>           
-                )}       
-             <Button
-              size="sm"
-              className="bg-transparant text-dark rounded-full"
-              onClick={!auth.isAuthenticated ? handleLoginClick : () => {}}
-            >
-              <FontAwesomeIcon icon={faCartShopping} />
-            </Button> 
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  className="bg-transparant text-dark rounded-full"
+                  onClick={
+                    !auth.isAuthenticated
+                      ? () => navigate("/login")
+                      : () => setCartModalOpen(!isCartModalOpen)
+                  }
+                >
+                  <FontAwesomeIcon icon={faCartShopping} />
+                </Button>
               </>
             )}
             <IconButton
@@ -206,17 +211,18 @@ const Nav = () => {
               </Button>
             </>
           ) : (
-            <>{/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
-            {auth.user.role == "ADMIN" && (
-                 <Button
-                 size="sm"
-                 className="bg-white text-black border w-full"
-                 onClick={handleAdminClick}
-               >
-                 <FontAwesomeIcon icon={faUser} />
-                 <span> Admin </span>
-               </Button>        
-                )}        
+            <>
+              {/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
+              {auth.user.role === "ADMIN" && (
+                <Button
+                  size="sm"
+                  className="bg-white text-black border w-full"
+                  onClick={handleAdminClick}
+                >
+                  <FontAwesomeIcon icon={faUser} />
+                  <span> Admin </span>
+                </Button>
+              )}
             </>
           )}
         </MobileNav>
