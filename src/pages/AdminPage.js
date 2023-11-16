@@ -43,7 +43,7 @@ export default function AdminPage() {
 
           <div
             class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
-            onClick={() => navigate("/dashboard/users")}
+            onClick={() => navigate("/dashboard/listUsers")}
           >
             <FontAwesomeIcon className="fs-3" icon={faUser} />
             <h2 class="text-xl font-semibold mb-2">Voir les utilisateurs</h2>
