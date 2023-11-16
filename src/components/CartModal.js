@@ -7,6 +7,8 @@ import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 const CartModal = ({ isOpen, onClose, cartItems, onHandleCart }) => {
   const navigate = useNavigate();
 
+  const isCartItems = cartItems && cartItems.length > 0;
+
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
@@ -37,7 +39,7 @@ const CartModal = ({ isOpen, onClose, cartItems, onHandleCart }) => {
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <div className="mt-2 p-0">
-                      {cartItems.length > 0 ? (
+                      {isCartItems ? (
                         <ul>
                           {cartItems.map((item, idx) => {
                             return (
@@ -101,10 +103,9 @@ const CartModal = ({ isOpen, onClose, cartItems, onHandleCart }) => {
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                     onClick={() => navigate(`/payment`)}
-                    disabled={cartItems.length === 0}
+                    disabled={!isCartItems}
                     style={{
-                      cursor:
-                        cartItems.length === 0 ? "not-allowed" : "pointer",
+                      cursor: !isCartItems ? "not-allowed" : "pointer",
                     }}
                   >
                     Payer

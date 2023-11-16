@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ProductCard = ({ product, onClick }) => {
   const [quantity, setQuantity] = useState(1);
+  const [btnText, setBtnText] = useState("Ajouter au panier");
 
   const handleQuantity = (type, value) => {
     if (type === "LESS") {
@@ -10,6 +11,13 @@ const ProductCard = ({ product, onClick }) => {
 
     return setQuantity(value);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setBtnText("Ajouter au panier");
+    }, 2200);
+    return () => clearTimeout(timer);
+  }, [btnText]);
 
   return (
     <div className="bg-white p-0 rounded-md shadow-md">
@@ -53,9 +61,11 @@ const ProductCard = ({ product, onClick }) => {
               id: product._id,
               quantity,
             });
+
+            setBtnText("Ajouté");
           }}
         >
-          Ajouter au panier
+          {btnText}
         </button>
       </div>
     </div>

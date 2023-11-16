@@ -1,17 +1,18 @@
 import { useEffect, useContext } from "react";
-import { useNavigate, useLocation  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "contexts/AuthContext";
 
 const SecurityGuard = ({
   unloggedRedirectionPath = null,
   loggedRedirectionPath = null,
+  adminRedirectionPath = null,
   children,
 }) => {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation();
 
+  console.log(adminRedirectionPath);
 
   useEffect(() => {
     if (unloggedRedirectionPath && !auth.isAuthenticated) {
@@ -22,10 +23,14 @@ const SecurityGuard = ({
       return navigate(loggedRedirectionPath);
     }
 
-    // Empêcher aux utilisateurs connecté ou nas d'accèder à la page admin
-    if (location.pathname.includes('/admin') && (!auth.isAuthenticated || auth.user.role !== "ADMIN")) {
-      navigate('/');
+    if (
+      adminRedirectionPath &&
+      ((auth.isAuthenticated && auth.user.role !== "ADMIN") ||
+        !auth.isAuthenticated)
+    ) {
+      return navigate(adminRedirectionPath);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
