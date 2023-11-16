@@ -1,4 +1,24 @@
-const ProductCard = ({ product, onDecrement, onIncrement, quantity }) => {
+import { useState, useEffect } from "react";
+
+const ProductCard = ({ product, onClick }) => {
+  const [quantity, setQuantity] = useState(1);
+  const [btnText, setBtnText] = useState("Ajouter au panier");
+
+  const handleQuantity = (type, value) => {
+    if (type === "LESS") {
+      if (quantity === 1) return;
+    }
+
+    return setQuantity(value);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setBtnText("Ajouter au panier");
+    }, 2200);
+    return () => clearTimeout(timer);
+  }, [btnText]);
+
   return (
     <div className="bg-white p-0 rounded-md shadow-md">
       <img
@@ -15,14 +35,14 @@ const ProductCard = ({ product, onDecrement, onIncrement, quantity }) => {
           <div className="flex items-center">
             <button
               className="bg-black text-white px-4 py-2 rounded-l-md"
-              onClick={() => onDecrement(product._id)}
+              onClick={() => handleQuantity("LESS", quantity - 1)}
             >
               -
             </button>
-            <span className="px-4">{quantity || 0}</span>
+            <span className="px-4">{quantity}</span>
             <button
               className="bg-black text-white px-4 py-2 rounded-r-md"
-              onClick={() => onIncrement(product._id)}
+              onClick={() => handleQuantity("MORE", quantity + 1)}
             >
               +
             </button>
@@ -30,11 +50,22 @@ const ProductCard = ({ product, onDecrement, onIncrement, quantity }) => {
         </div>
         <button
           className="mt-4 bg-black text-white px-4 py-2 rounded-md"
-          onClick={() =>
-            alert(`Added ${quantity || 0} ${product.name}(s) to cart`)
-          }
+          onClick={() => {
+            if (quantity === 0) return;
+
+            onClick({
+              photo: product.photo,
+              name: product.name,
+              price: product.price,
+              time: product.time,
+              id: product._id,
+              quantity,
+            });
+
+            setBtnText("Ajouté");
+          }}
         >
-          Ajouter au panier
+          {btnText}
         </button>
       </div>
     </div>

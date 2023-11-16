@@ -37,86 +37,78 @@ const App = () => {
   useEffect(() => {
     if (auth.isAuthenticated) {
       const fetchLatestOrder = async () => {
-        const access_token = Cookies.get('fe-token');
-  
-        return (await axios.get(
-          "http://localhost:4400/api/orders/latest",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer " + access_token,
-            },
-          }
-        ));
+        const access_token = Cookies.get("fe-token");
+
+        return await axios.get("http://localhost:4400/api/orders/latest", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + access_token,
+          },
+        });
       };
-  
+
       const updateOrder = async () => {
         const response = await fetchLatestOrder();
         if (response.data.success) {
           setorderConfirmed(response.data);
         }
       };
-  
-      setTimeout(()=>{
+
+      setTimeout(() => {
         updateOrder();
-      },3000)
+      }, 3000);
     }
   }, [auth.isAuthenticated]);
 
   if (isLoading) return <>LOADING...</>;
 
-  
-
   return (
-    
     <AuthContext.Provider value={{ auth, setAuth }}>
       <OrderContext.Provider value={{ orderConfirmed, setorderConfirmed }}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route
-            path="/register"
-            element={
-              <SecurityGuard loggedRedirectionPath="/">
-                <RegisterPage />
-              </SecurityGuard>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <SecurityGuard loggedRedirectionPath="/">
-                <LoginPage />
-              </SecurityGuard>
-            }
-          />
-          <Route
-            path="/order"
-            element={
-                <CurrentCommand />
-            }
-          />
-          <Route
-            path="/addProduct"
-            element={
-              // <SecurityGuard loggedRedirectionPath="/">
-              <AddProductPage />
-              // </SecurityGuard>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <SecurityGuard>
-                <AdminPage />
-              </SecurityGuard>
-            }
-          />
-        </Routes>
-      </Router>
+        <Router>
+          <Routes>
+            <Route exact path="/" element={<HomePage />} />
+            <Route
+              exact
+              path="/register"
+              element={
+                <SecurityGuard loggedRedirectionPath="/">
+                  <RegisterPage />
+                </SecurityGuard>
+              }
+            />
+            <Route
+              exact
+              path="/login"
+              element={
+                <SecurityGuard loggedRedirectionPath="/">
+                  <LoginPage />
+                </SecurityGuard>
+              }
+            />
+            <Route path="/order" element={<CurrentCommand />} />
+            <Route
+              exact
+              path="/dashboard/product/form"
+              element={
+                <SecurityGuard adminRedirectionPath="/">
+                  <AddProductPage />
+                </SecurityGuard>
+              }
+            />
+            <Route
+              exact
+              path="/dashboard"
+              element={
+                <SecurityGuard adminRedirectionPath="/">
+                  <AdminPage />
+                </SecurityGuard>
+              }
+            />
+          </Routes>
+        </Router>
       </OrderContext.Provider>
     </AuthContext.Provider>
-
   );
 };
 

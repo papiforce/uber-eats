@@ -8,21 +8,6 @@ export default function AdminPage() {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Aller sur la page "ajouter un menu"
-  const handleAddMenuClick = () => {
-    navigate("/addMenu");
-  };
-
-  // Aller sur la page "Voir les menus"
-  const handleMenuClick = () => {
-    navigate("/menu");
-  };
-
-  // Aller sur la page "Utilisateurs"
-  const handleUsersClick = () => {
-    navigate("/users");
-  };
-
   return (
     <>
       <Layout>
@@ -39,7 +24,7 @@ export default function AdminPage() {
         <div class="max-w-1xl mx-auto lg:flex lg:justify-center">
           <div
             class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
-            onClick={handleMenuClick}
+            onClick={() => navigate("/dashboard/products")}
           >
             <svg
               class="w-6 h-6 text-gray-800 dark:text-white"
@@ -56,7 +41,7 @@ export default function AdminPage() {
 
           <div
             class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
-            onClick={handleAddMenuClick}
+            onClick={() => navigate("/dashboard/product/form")}
           >
             <svg
               class="w-6 h-6 text-gray-800 dark:text-white"
@@ -78,7 +63,7 @@ export default function AdminPage() {
 
           <div
             class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
-            onClick={handleUsersClick}
+            onClick={() => navigate("/dashboard/users")}
           >
             <svg
               class="w-6 h-6 text-gray-800 dark:text-white"

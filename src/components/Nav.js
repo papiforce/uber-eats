@@ -10,23 +10,70 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import CartModal from "./CartModal";
+
 import { AuthContext } from "contexts/AuthContext";
 import { OrderContext } from "contexts/OrderContext";
 
-
-export default function Nav() {
+const Nav = () => {
   const { auth } = useContext(AuthContext);
-  const  { orderConfirmed }  = useContext(OrderContext);
-  const [openNav, setOpenNav] = useState(false);
+  const { orderConfirmed } = useContext(OrderContext);
   const navigate = useNavigate();
 
-  const handleRegisterClick = () => {
-    navigate("/register");
+  const [openNav, setOpenNav] = useState(false);
+  const [isCartModalOpen, setCartModalOpen] = useState(false);
+  const [currentCart, setCurrentCart] = useState(
+    auth.user && localStorage.getItem(`cart-${auth.user._id}`)
+      ? JSON.parse(localStorage.getItem(`cart-${auth.user._id}`))
+      : []
+  );
+
+  const handleCart = (actionType, productId) => {
+    const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
+    const cart = localStorage.getItem(isLogged);
+    const parseCart = JSON.parse(cart);
+
+    const productToUpdate = parseCart.find(
+      (subItem) => subItem.id === productId
+    );
+
+    if (actionType === "REMOVE") {
+      const updatedCart = parseCart.filter(
+        (subItem) => subItem.id !== productId
+      );
+
+      setCurrentCart(updatedCart);
+      return localStorage.setItem(isLogged, JSON.stringify(updatedCart));
+    }
+
+    if (actionType === "LESS") {
+      productToUpdate.quantity -= 1;
+      parseCart[parseCart.indexOf(productToUpdate)] = productToUpdate;
+    }
+
+    if (actionType === "MORE") {
+      productToUpdate.quantity += 1;
+      parseCart[parseCart.indexOf(productToUpdate)] = productToUpdate;
+    }
+
+    setCurrentCart(parseCart);
+    return localStorage.setItem(isLogged, JSON.stringify(parseCart));
   };
 
-  const handleLoginClick = () => {
-    navigate("/login");
-  };
+  const navList = (
+    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+      {/* Your list items go here */}
+    </ul>
+  );
+
+  useEffect(() => {
+    const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
+    const cart = localStorage.getItem(isLogged);
+    const parseCart = JSON.parse(cart);
+
+    setCurrentCart(parseCart);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCartModalOpen]);
 
   const handleAdminClick = () => {
     navigate("/admin");
@@ -41,13 +88,6 @@ export default function Nav() {
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
   }, []);
-
-  const navList = (
-    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      {/* Your list items go here */}
-    </ul>
-  );
-
 
   return (
     <>
@@ -66,17 +106,21 @@ export default function Nav() {
             <div className="mr-4 hidden lg:block">{navList}</div>
             {!auth.isAuthenticated ? (
               <div className="flex items-center gap-x-1">
-                            <Button
-              size="sm"
-              className="bg-transparant text-dark rounded-full"
-              onClick={!auth.isAuthenticated ? handleLoginClick : () => {}}
-            >
-              <FontAwesomeIcon icon={faCartShopping} />
-            </Button>
+                <Button
+                  size="sm"
+                  className="bg-transparant text-dark rounded-full"
+                  onClick={
+                    !auth.isAuthenticated
+                      ? () => navigate("/login")
+                      : () => setCartModalOpen(!isCartModalOpen)
+                  }
+                >
+                  <FontAwesomeIcon icon={faCartShopping} />
+                </Button>
                 <Button
                   size="sm"
                   className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
-                  onClick={handleLoginClick}
+                  onClick={() => navigate("/login")}
                 >
                   <FontAwesomeIcon icon={faUser} />
                   <span> Connexion</span>
@@ -86,37 +130,43 @@ export default function Nav() {
                   variant="gradient"
                   size="sm"
                   className="hidden rounded-full lg:inline-block w-44"
-                  onClick={handleRegisterClick}
+                  onClick={() => navigate("/register")}
                 >
                   <span>Inscription</span>
                 </Button>
               </div>
             ) : (
-              <>{/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
-              {/* Onglet ADMIN pour accèder à l'interface admin */}
+              <>
+                {/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
+                {/* Onglet ADMIN pour accèder à l'interface admin */}
                 {auth.user.role === "ADMIN" && (
-                    <Button
+                  <Button
                     size="sm"
                     className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
                     onClick={handleAdminClick}
                   >
                     <FontAwesomeIcon icon={faUser} />
                     <span> Admin </span>
-                  </Button>           
-                )}   
+                  </Button>
+                )}
 
-            { orderConfirmed &&            
-              <Button variant="filled" onClick={handleOrderClick} >Commande en cours</Button>             
-            } 
+                {orderConfirmed && (
+                  <Button variant="filled" onClick={handleOrderClick}>
+                    Commande en cours
+                  </Button>
+                )}
 
-             <Button
-              size="sm"
-              className="bg-transparant text-dark rounded-full"
-              onClick={!auth.isAuthenticated ? handleLoginClick : () => {}}
-            >
-              <FontAwesomeIcon icon={faCartShopping} />
-              
-            </Button> 
+                <Button
+                  size="sm"
+                  className="bg-transparant text-dark rounded-full"
+                  onClick={
+                    !auth.isAuthenticated
+                      ? () => navigate("/login")
+                      : () => setCartModalOpen(!isCartModalOpen)
+                  }
+                >
+                  <FontAwesomeIcon icon={faCartShopping} />
+                </Button>
               </>
             )}
             <IconButton
@@ -159,7 +209,7 @@ export default function Nav() {
               <Button
                 size="sm"
                 className="bg-white text-black border w-full"
-                onClick={handleLoginClick}
+                onClick={() => navigate("/login")}
               >
                 <FontAwesomeIcon icon={faUser} />
                 <span> Connexion</span>
@@ -167,27 +217,37 @@ export default function Nav() {
               <Button
                 variant="sm"
                 className="bg-white text-black border w-full"
-                onClick={handleRegisterClick}
+                onClick={() => navigate("/register")}
               >
                 <span>Inscription</span>
               </Button>
             </>
           ) : (
-            <>{/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
-            {auth.user.role == "ADMIN" && (
-                 <Button
-                 size="sm"
-                 className="bg-white text-black border w-full"
-                 onClick={handleAdminClick}
-               >
-                 <FontAwesomeIcon icon={faUser} />
-                 <span> Admin </span>
-               </Button>        
-                )}        
+            <>
+              {/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
+              {auth.user.role === "ADMIN" && (
+                <Button
+                  size="sm"
+                  className="bg-white text-black border w-full"
+                  onClick={handleAdminClick}
+                >
+                  <FontAwesomeIcon icon={faUser} />
+                  <span> Admin </span>
+                </Button>
+              )}
             </>
           )}
         </MobileNav>
       </Navbar>
+
+      <CartModal
+        isOpen={isCartModalOpen}
+        onClose={() => setCartModalOpen(!isCartModalOpen)}
+        cartItems={currentCart}
+        onHandleCart={(action, id) => handleCart(action, id)}
+      />
     </>
   );
-}
+};
+
+export default Nav;

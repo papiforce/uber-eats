@@ -1,8 +1,8 @@
 import { axiosInstance } from "./axiosInstance";
 import { useQuery, useMutation } from "react-query";
 
-const getMenu = async (options = "onlyActive=true") => {
-  const { data } = await axiosInstance.get(`/meals?${options}`);
+const getMenu = async (options) => {
+  const { data } = await axiosInstance.get(`/meals${options}`);
 
   return data;
 };
@@ -28,20 +28,20 @@ const deleteMeal = async (mealId) => {
   return data;
 };
 
-export const useGetMenu = (onSuccess) => {
-  return useQuery("menu", getMenu, {
+export const useGetMenu = (options, onSuccess) => {
+  return useQuery("menu", () => getMenu(options), {
     onSuccess,
   });
 };
 
-export const useAddMeal = (onSuccess) => {
-  return useMutation(addMeal, { onSuccess });
+export const useAddMeal = (data, onSuccess) => {
+  return useMutation(() => addMeal(data), { onSuccess });
 };
 
 export const useUpdateMeal = ({ mealId, data }, onSuccess, onError) => {
   return useMutation(() => updateMeal(mealId, data), { onSuccess, onError });
 };
 
-export const useDeleteMeal = ({ mealId, data }, onSuccess, onError) => {
-  return useMutation(() => deleteMeal(mealId, data), { onSuccess, onError });
+export const useDeleteMeal = (mealId, onSuccess, onError) => {
+  return useMutation(() => deleteMeal(mealId), { onSuccess, onError });
 };
