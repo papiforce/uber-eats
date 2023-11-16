@@ -13,7 +13,7 @@ const HomePage = () => {
     setProducts(payload);
   };
 
-  useGetMenu(onSuccess);
+  useGetMenu("?onlyActive=true", onSuccess);
 
   const handleIncrement = (productId) => {
     setQuantities((prevQuantities) => ({

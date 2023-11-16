@@ -15,7 +15,7 @@ export default function AdminPage() {
 
   // Aller sur la page "Voir les menus"
   const handleMenuClick = () => {
-    navigate("/menu");
+    navigate("/productList");
   };
 
   // Aller sur la page "Utilisateurs"
