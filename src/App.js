@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Cookies from "js-cookie";
@@ -14,6 +14,7 @@ import LoginPage from "pages/LoginPage";
 import AddProductPage from "pages/AddProductPage";
 import AdminPage from "pages/AdminPage";
 import ProductListPage from "pages/ProductListPage";
+import LoadingAnimation from "components/LoadingAnimation";
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -32,7 +33,22 @@ const App = () => {
 
   const { isLoading } = useCurrentUser(onSuccess, onError);
 
-  if (isLoading) return <>LOADING...</>;
+  const [showLoading, setShowLoading] = useState(true);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      setShowLoading(false);
+    }, 500); 
+
+    return () => clearTimeout(delay);
+  }, [isLoading]);
+
+  if (showLoading) return (
+    <>
+        <LoadingAnimation />
+    </>
+  );
+
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

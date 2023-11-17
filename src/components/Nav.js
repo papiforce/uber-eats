@@ -11,6 +11,7 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import CartModal from "./CartModal";
+import BikePNG from '../assets/img/bike.png';
 
 import { AuthContext } from "contexts/AuthContext";
 
@@ -89,10 +90,18 @@ const Nav = () => {
           <Typography
             as="a"
             href="/"
-            className="mr-4 cursor-pointer py-1.5 text-4xl text-black no-underline"
+            className="cursor-pointer py-1.5 text-4xl text-black no-underline relative"
           >
             EXPRESS <span className="fw-bold"> FOOD</span>
           </Typography>
+          <Typography as="a" href="/">
+            <img
+              className="w-12 m-auto hidden lg:block"
+              alt=""
+              src={BikePNG}
+            />
+          </Typography>
+
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
             {!auth.isAuthenticated ? (
