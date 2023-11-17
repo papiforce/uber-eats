@@ -19,16 +19,21 @@ const cancelOrder = async (orderId) => {
   return data;
 };
 
-const updateOrderStatusDelivery = async (orderId, status, code) => {
-  const { data } = await axiosInstance.put(
-    `/orders/update-delivery-status/${orderId}`,
-    {
-      status,
-      code,
-    }
-  );
+export const updateOrderStatusDelivery = async (orderId, status, code=undefined) => {
+  try {
+    const { data } = await axiosInstance.put(
+      `/orders/update-delivery-status/${orderId}`,
+      {
+        status,
+      }
+    );
+  
+    return data;
 
-  return data;
+  } catch (e) 
+  
+  {}
+  
 };
 
 const updateOrderStatusAdmin = async (orderId, status) => {
@@ -45,15 +50,15 @@ export const useGetOrders = (options, onSuccess) => {
   });
 };
 
-export const useCreateOrder = async (form, onSuccess) => {
-  return useMutation(() => createOrder(form), { onSuccess });
+export const useCreateOrder = (onSuccess) => {
+  return useMutation(createOrder, { onSuccess });
 };
 
-export const useCancelOrder = async (orderId, onSuccess) => {
+export const useCancelOrder = (orderId, onSuccess) => {
   return useMutation(() => cancelOrder(orderId), { onSuccess });
 };
 
-export const useUpdateOrderStatusDelivery = async (
+export const useUpdateOrderStatusDelivery = (
   orderId,
   status,
   code,
@@ -64,7 +69,7 @@ export const useUpdateOrderStatusDelivery = async (
   });
 };
 
-export const useUpdateOrderStatusAdmin = async (orderId, status, onSuccess) => {
+export const useUpdateOrderStatusAdmin = (orderId, status, onSuccess) => {
   return useMutation(() => updateOrderStatusAdmin(orderId, status), {
     onSuccess,
   });

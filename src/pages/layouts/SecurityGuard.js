@@ -7,12 +7,11 @@ const SecurityGuard = ({
   unloggedRedirectionPath = null,
   loggedRedirectionPath = null,
   adminRedirectionPath = null,
+  deliveryRedirectionPath = null,
   children,
 }) => {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  console.log(adminRedirectionPath);
 
   useEffect(() => {
     if (unloggedRedirectionPath && !auth.isAuthenticated) {
@@ -29,6 +28,15 @@ const SecurityGuard = ({
         !auth.isAuthenticated)
     ) {
       return navigate(adminRedirectionPath);
+    }
+    if (
+      deliveryRedirectionPath &&
+      ((auth.isAuthenticated &&
+        auth.user.role !== "DELIVERY_PERSON" &&
+        auth.user.role !== "ADMIN") ||
+        !auth.isAuthenticated)
+    ) {
+      return navigate(deliveryRedirectionPath);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
