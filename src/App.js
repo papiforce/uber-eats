@@ -117,9 +117,9 @@ const App = () => {
           <Route
             path="/orders"
             element={
-              // <SecurityGuard loggedRedirectionPath="/">
-              <OrderListPage />
-              // </SecurityGuard>
+              <SecurityGuard unloggedRedirectionPath="/">
+                <OrderListPage />
+              </SecurityGuard>
             }
           />
         </Routes>

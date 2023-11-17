@@ -16,7 +16,6 @@ export default function AddProductPage() {
     quantity: 1,
   });
 
-  console.log(form);
   const onSuccess = () => {
     navigate("/dashboard/products");
   };

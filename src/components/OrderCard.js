@@ -1,10 +1,4 @@
-// import {
-//   faEye,
-//   faEyeSlash,
-// } from "@fortawesome/free-regular-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-export default function OrderCard({ order }) {
+const OrderCard = ({ order }) => {
   const dateCreated = new Date(order.createdAt);
 
   const dateCreatedFormated = dateCreated.toLocaleDateString("fr-FR", {
@@ -38,8 +32,7 @@ export default function OrderCard({ order }) {
         <div class="flex-shrink-0"></div>
         <div class="flex-1 min-w-0">
           <p class="text-xl font-medium text-gray-900 truncate dark:text-white">
-            Date de commande :{" "}
-            {dateCreatedFormated + " à " + hourCreatedFormatted}
+            Date de commande : {dateCreatedFormated} à {hourCreatedFormatted}
           </p>
 
           <p class="text-md text-gray-500 truncate dark:text-gray-400">
@@ -49,7 +42,11 @@ export default function OrderCard({ order }) {
         <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
           <ul>
             {order.content.map((product, index) => {
-              return <li>{product.name + " X " + product.quantity}</li>;
+              return (
+                <li key={index}>
+                  {product.name} X {product.quantity}
+                </li>
+              );
             })}
             <li className="mt-5 text-end fs-4">{order.totalPrice} €</li>
           </ul>
@@ -57,4 +54,6 @@ export default function OrderCard({ order }) {
       </div>
     </li>
   );
-}
+};
+
+export default OrderCard;

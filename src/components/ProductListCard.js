@@ -1,4 +1,9 @@
-import { faEye, faEyeSlash, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import {
+  faEye,
+  faEyeSlash,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, ButtonGroup } from "@material-tailwind/react";
 import { queryClient } from "../index";
@@ -9,7 +14,6 @@ import { Fragment, useRef, useState } from "react";
 export default function ProductListCard({ product }) {
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-
 
   const [editedProduct, setEditedProduct] = useState({
     name: product.name,
@@ -22,9 +26,7 @@ export default function ProductListCard({ product }) {
     isAvailable: product.isAvailable,
   });
 
-
   const handleOpenEdit = () => {
-    
     setEditedProduct({
       name: product.name,
       description: product.description,
@@ -38,8 +40,6 @@ export default function ProductListCard({ product }) {
     setOpenEdit(true);
   };
 
-
-  console.log("data:", setEditedProduct);
   const cancelButtonRef = useRef(null);
 
   const onDeleteMealSuccess = () => {
@@ -69,7 +69,6 @@ export default function ProductListCard({ product }) {
     setOpenEdit(false);
   };
 
-  console.log(editedProduct);
   return (
     <li class="p-4">
       <div class="flex items-center space-x-4 rtl:space-x-reverse">

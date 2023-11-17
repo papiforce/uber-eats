@@ -10,7 +10,7 @@ const OrderListPage = () => {
     setOrders(payload);
   };
 
-  useGetOrders("?onlyActive=false", onGetOrderSuccess);
+  useGetOrders("", onGetOrderSuccess);
 
   return (
     <Layout>

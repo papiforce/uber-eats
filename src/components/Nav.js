@@ -87,9 +87,7 @@ const Nav = () => {
 
   return (
     <>
-      <Navbar
-        className={`sticky top-0 z-10 max-w-full backdrop-blur-none shadow backdrop-saturate-100 bg-opacity-100 rounded-none border-0 px-4 py-3 lg:px-8 lg:py-4`}
-      >
+      <Navbar className="sticky top-0 z-10 max-w-full backdrop-blur-none shadow backdrop-saturate-100 bg-opacity-100 rounded-none border-0 px-4 py-3 lg:px-8 lg:py-4">
         <div className="flex items-center justify-between text-blue-gray-900">
           <Typography
             as="a"
