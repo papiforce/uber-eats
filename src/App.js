@@ -17,7 +17,6 @@ import CheckoutPage from "pages/CheckoutPage";
 import ProductListPage from "pages/ProductListPage";
 import LoadingAnimation from "components/LoadingAnimation";
 import UsersListPage from "pages/UsersListPage";
-import DeliveryPage from "pages/DeliveryPage";
 import DeliveryOrdersPage from "pages/DeliveryOrdersPage";
 import OrderListPage from "pages/OrderListPage";
 import { useGetLatestOrder } from "api/orderQueries";
@@ -107,15 +106,6 @@ const App = () => {
               element={
                 <SecurityGuard adminRedirectionPath="/">
                   <AddProductPage />
-                </SecurityGuard>
-              }
-            />
-            <Route
-              exact
-              path="/delivery-dashboard"
-              element={
-                <SecurityGuard deliveryRedirectionPath="/">
-                  <DeliveryPage />
                 </SecurityGuard>
               }
             />
