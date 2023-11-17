@@ -119,7 +119,9 @@ const CheckoutPage = () => {
 
     const total = subtotal + shippingFee;
 
-    return total.toFixed(2);
+    console.log(total, subtotal, shippingFee, ` <== total`);
+
+    return { total: total.toFixed(2), subtotal };
   };
 
   // useEffect(() => {
@@ -271,7 +273,9 @@ const CheckoutPage = () => {
             <div class="mt-6 border-t border-b py-2">
               <div class="flex items-center justify-between">
                 <p class="text-sm font-medium text-gray-900">Sous-total</p>
-                <p class="font-semibold text-gray-900">{`${calculateTotal()} €`}</p>
+                <p class="font-semibold text-gray-900">{`${
+                  calculateTotal().subtotal
+                } €`}</p>
               </div>
               <div class="flex items-center justify-between">
                 <p class="text-sm font-medium text-gray-900">Livraison</p>
@@ -284,7 +288,9 @@ const CheckoutPage = () => {
             </div>
             <div class="mt-6 flex items-center justify-between">
               <p class="text-sm font-medium text-gray-900">Total</p>
-              <p class="text-2xl font-semibold text-gray-900">{`${calculateTotal()} €`}</p>
+              <p class="text-2xl font-semibold text-gray-900">{`${
+                calculateTotal().total
+              } €`}</p>
             </div>
           </div>
           <button
