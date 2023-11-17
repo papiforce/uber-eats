@@ -38,41 +38,19 @@ const CheckoutPage = () => {
     code: "",
   });
 
+
+// Ouvrir la modal et redirection vers la page des commandes
   const openModal = () => {
     setIsModalOpen(true);
     setIsLoading(true);
-
+  
     setTimeout(() => {
       setIsLoading(false);
+      setIsModalOpen(false);
+      navigate("/orders"); 
     }, 2000);
   };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    if (name.startsWith("content.")) {
-      const [_, index, fieldName] = name.split(".");
-      const contentIndex = parseInt(index, 10);
-
-      setOrder((prevOrder) => {
-        const updatedContent = [...prevOrder.content];
-        updatedContent[contentIndex] = {
-          ...updatedContent[contentIndex],
-          [fieldName]: value,
-        };
-
-        return {
-          ...prevOrder,
-          content: updatedContent,
-        };
-      });
-    } else {
-      setOrder({
-        ...order,
-        [name]: value,
-      });
-    }
-  };
 
   const handleSubmit = async () => {
     try {
@@ -97,8 +75,7 @@ const CheckoutPage = () => {
         code: "",
       });
 
-      setIsModalOpen(false);
-      navigate("/");
+      openModal();
     } catch (error) {
       console.error("Erreur lors de la requête POST:", error);
     }
@@ -124,13 +101,6 @@ const CheckoutPage = () => {
     return { total: total.toFixed(2), subtotal };
   };
 
-  // useEffect(() => {
-  //   const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
-  //   const orderData = JSON.parse(localStorage.getItem(isLogged));
-  //   setOrderCart(orderData);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   return (
     <Layout title="Express Food | Paiement">
       <div class="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
@@ -147,27 +117,23 @@ const CheckoutPage = () => {
                   src={item.photo}
                   alt="img"
                   value={orderData[index].photo}
-                  onChange={handleChange}
                 />
                 <div class="flex w-full flex-col px-4 py-4">
                   <span
                     class="font-semibold"
                     value={orderData[index].name}
-                    onChange={handleChange}
                   >
                     {item.name}
                   </span>
                   <span
                     class="float-right text-gray-400"
                     value={orderData[index].quantity}
-                    onChange={handleChange}
                   >
                     Quantité : {item.quantity}
                   </span>
                   <p
                     class="text-lg font-bold"
                     value={orderData[index].price}
-                    onChange={handleChange}
                   >
                     {`${(item.price * item.quantity).toFixed(2)} `} €
                   </p>
@@ -306,15 +272,10 @@ const CheckoutPage = () => {
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
           <div className="bg-white p-8 w-96">
             {isLoading ? (
-              <p className="text-center">Chargement en cours...</p>
-            ) : (
-              <div>
-                <h2 className="text-2xl text-center  font-semibold mb-4">
-                  Votre paiement a été confirmé, <br></br> redirection en
-                  cours...
-                </h2>
-              </div>
-            )}
+              <h2 className="text-2xl text-center font-semibold mb-4">
+                Votre paiement a été confirmé, <br /> redirection en cours...
+              </h2>
+            ) : null}
           </div>
         </div>
       )}
