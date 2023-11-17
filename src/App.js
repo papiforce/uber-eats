@@ -18,6 +18,7 @@ import ProductListPage from "pages/ProductListPage";
 import UsersListPage from "pages/UsersListPage";
 import DeliveryPage from "pages/DeliveryPage";
 import FreeOrdersPage from "pages/FreeOrdersPage";
+import OrderListPage from "pages/OrderListPage";
 import { useGetLatestOrder } from "api/orderQueries";
 import OrderListAdmin from "pages/OrderListAdminPage";
 
@@ -78,6 +79,14 @@ const App = () => {
               element={
                 <SecurityGuard loggedRedirectionPath="/">
                   <LoginPage />
+                </SecurityGuard>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <SecurityGuard unloggedRedirectionPath="/">
+                  <OrderListPage />
                 </SecurityGuard>
               }
             />

@@ -16,7 +16,6 @@ export default function AddProductPage() {
     quantity: 1,
   });
 
-  console.log(form);
   const onSuccess = () => {
     navigate("/dashboard/products");
   };
@@ -31,7 +30,7 @@ export default function AddProductPage() {
   return (
     <Layout>
       <h2 className="text-center w-100 mt-5">Ajouter un produit</h2>
-      <div className="w-full max-w-6xl mx-auto bg-white border  border-gray-200 my-5 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700 p-5">
+      <div className="w-full max-w-6xl mx-auto bg-white border  border-gray-200 mt-5 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700 p-3">
         <div className="mb-4">
           <label
             htmlFor="firstname"
