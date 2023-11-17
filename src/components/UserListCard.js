@@ -1,7 +1,7 @@
-import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Transition } from "@headlessui/react";
-import { Button, ButtonGroup } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { useUpdateUser } from "api/userQueries";
 import { queryClient } from "index";
 import { Fragment, useRef, useState } from "react";
@@ -59,19 +59,14 @@ export default function UserListCard({ user }) {
           {user.email}
         </td>
         <td className="py-2 px-4 border-b">
-          <ButtonGroup className="w-100">
-            <Button
-              className="rounded-start w-50"
-              onClick={() => {
-                handleOpenEdit();
-              }}
-            >
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </Button>
-            <Button className="rounded-end w-50">
-              <FontAwesomeIcon icon={faTrashCan} />
-            </Button>
-          </ButtonGroup>
+          <Button
+            className="rounded-start w-50"
+            onClick={() => {
+              handleOpenEdit();
+            }}
+          >
+            <FontAwesomeIcon icon={faPenToSquare} />
+          </Button>
         </td>
       </tr>
       <div>
