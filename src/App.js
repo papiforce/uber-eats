@@ -15,6 +15,7 @@ import AddProductPage from "pages/AddProductPage";
 import AdminPage from "pages/AdminPage";
 import CheckoutPage from "pages/CheckoutPage";
 import ProductListPage from "pages/ProductListPage";
+import UsersListPage from "pages/UsersListPage";
 import DeliveryPage from "pages/DeliveryPage";
 import FreeOrdersPage from "pages/FreeOrdersPage";
 
@@ -110,6 +111,14 @@ const App = () => {
             element={
               <SecurityGuard adminRedirectionPath="/">
                 <ProductListPage />
+              </SecurityGuard>
+            }
+          />
+          <Route
+            path="/dashboard/users"
+            element={
+              <SecurityGuard adminRedirectionPath="/">
+                <UsersListPage />
               </SecurityGuard>
             }
           />
