@@ -1,49 +1,48 @@
-
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Transition } from "@headlessui/react";
 import { Button, ButtonGroup } from "@material-tailwind/react";
-import React, { useState } from 'react';
+import { useUpdateUser } from "api/userQueries";
+import { queryClient } from "index";
+import { Fragment, useRef, useState } from "react";
 
+export default function UserListCard({ user }) {
+  const [openEdit, setOpenEdit] = useState(false);
 
-export default function UserListCard({user}) {
+  const [editedUser, setEditedUser] = useState({
+    firstname: user.firstname,
+    lastname: user.lastname,
+    address: user.address.address,
+    email: user.email,
+    role: user.role,
+  });
 
-      const [openEdit, setOpenEdit] = useState(false);
+  const cancelButtonRef = useRef(null);
 
+  const handleOpenEdit = () => {
+    setEditedUser({
+      firstname: user.firstname,
+      lastname: user.lastname,
+      address: user.address.address,
+      email: user.email,
+      role: user.role,
+    });
+    setOpenEdit(true);
+  };
 
-    // const [editeduser, setEditeduser] = useState({
-    //   firstname: user.name,
-    //   lastname: user.description,
-    //   address: user.price,
-    //   email: user.time,
-    //   role: user.photo,
-    // });
+  const onUpdateUserSuccess = () => {
+    queryClient.invalidateQueries(["getUsers"]);
+  };
 
-    // const handleOpenEdit = () => {
-    //   setEditeduser({
-    //     firstname: user.name,
-    //     lastname: user.description,
-    //     address: user.price,
-    //     email: user.time,
-    //     role: user.photo,
-    //   });
-    //   setOpenEdit(true);
-    // };
+  const { mutate: mutateUpdate } = useUpdateUser(
+    { userId: user._id, data: {...editedUser, address:editedUser.address} },
+    onUpdateUserSuccess
+  );
 
-
-    //     const onUpdateUserSuccess = () => {
-    //       queryClient.invalidateQueries(["menu"]);
-    //     };
-
-    //     const { mutate: mutateUpdate } = useUpdateUser(
-    //       { mealId: user._id, data: editeduser },
-    //       onUpdateUserSuccess
-    //     );
-
-    //     const handleUpdate = () => {
-    //       mutateUpdate(editeduser);
-    //       setOpenEdit(false);
-    //     };
+  const handleUpdate = () => {
+    mutateUpdate(editedUser);
+    setOpenEdit(false);
+  };
   return (
     <>
       <tr key={user.id} className="transition-all hover:bg-gray-50">
@@ -64,7 +63,7 @@ export default function UserListCard({user}) {
             <Button
               className="rounded-start w-50"
               onClick={() => {
-                setOpenEdit(true);
+                handleOpenEdit();
               }}
             >
               <FontAwesomeIcon icon={faPenToSquare} />
@@ -76,8 +75,13 @@ export default function UserListCard({user}) {
         </td>
       </tr>
       <div>
-        <Transition.Root show={openEdit}>
-          <Dialog as="div" onClose={setOpenEdit} className="relative z-10">
+        <Transition.Root show={openEdit} as={Fragment}>
+          <Dialog
+            as="div"
+            onClose={setOpenEdit}
+            initialFocus={cancelButtonRef}
+            className="relative z-10"
+          >
             <Transition.Child
               enter="ease-out duration-300"
               enterFrom="opacity-0"
@@ -120,8 +124,14 @@ export default function UserListCard({user}) {
                               </label>
                               <input
                                 type="text"
-                                value={user.lastname}
+                                value={editedUser.lastname}
                                 className="border border-gray-300  rounded-md text-dark w-100 focus:outline-none  p-2 mr-2"
+                                onChange={(e) =>
+                                  setEditedUser({
+                                    ...editedUser,
+                                    lastname: e.target.value,
+                                  })
+                                }
                               />
                             </div>
                             <div className="mt-4">
@@ -133,8 +143,14 @@ export default function UserListCard({user}) {
                               </label>
                               <input
                                 type="text"
-                                value={user.firstname}
+                                value={editedUser.firstname}
                                 className="border border-gray-300  rounded-md text-dark w-100 focus:outline-none  p-2 mr-2"
+                                onChange={(e) =>
+                                  setEditedUser({
+                                    ...editedUser,
+                                    firstname: e.target.value,
+                                  })
+                                }
                               />
                             </div>
                             <div className="mt-4">
@@ -146,8 +162,14 @@ export default function UserListCard({user}) {
                               </label>
                               <input
                                 type="mail"
-                                value={user.email}
+                                value={editedUser.email}
                                 className="border border-gray-300  rounded-md text-dark w-100 focus:outline-none  p-2 mr-2"
+                                onChange={(e) =>
+                                  setEditedUser({
+                                    ...editedUser,
+                                    email: e.target.value,
+                                  })
+                                }
                               />
                             </div>
                             <div className="mt-4">
@@ -159,8 +181,14 @@ export default function UserListCard({user}) {
                               </label>
                               <input
                                 type="text"
-                                value={user.address.address}
+                                value={editedUser.address}
                                 className="border border-gray-300  rounded-md text-dark w-100 focus:outline-none  p-2 mr-2"
+                                onChange={(e) =>
+                                  setEditedUser({
+                                    ...editedUser,
+                                    address: e.target.value,
+                                  })
+                                }
                               />
                             </div>
                             <div className="mt-4">
@@ -170,11 +198,21 @@ export default function UserListCard({user}) {
                               >
                                 Rôle
                               </label>
-                              <input
-                                type="text"
-                                value={user.lastname}
-                                className="border border-gray-300  rounded-md text-dark w-100 focus:outline-none  p-2 mr-2"
-                              />
+                              <select
+                                name="type"
+                                className="border border-gray-300 rounded-md text-dark w-100 focus:outline-none p-2 mr-2"
+                                value={editedUser.role}
+                                onChange={(e) =>
+                                  setEditedUser({
+                                    ...editedUser,
+                                    role: e.target.value,
+                                  })
+                                }
+                              >
+                                <option value="ADMIN">Administrateur</option>
+                                <option value="MEMBER">Client</option>
+                                <option value="DELIVERY_PERSON">Livreur</option>
+                              </select>
                             </div>
                           </Dialog.Description>
                         </div>
@@ -184,6 +222,7 @@ export default function UserListCard({user}) {
                       <button
                         type="button"
                         className="mt-3 inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                        onClick={() => handleUpdate()}
                       >
                         Valider les modifications
                       </button>
