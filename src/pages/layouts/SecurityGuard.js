@@ -12,8 +12,6 @@ const SecurityGuard = ({
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  console.log(adminRedirectionPath);
-
   useEffect(() => {
     if (unloggedRedirectionPath && !auth.isAuthenticated) {
       return navigate(unloggedRedirectionPath);

@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "contexts/AuthContext";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
+import { useCreateOrder } from "api/orderQueries";
 
 const CheckoutPage = () => {
   const { auth } = useContext(AuthContext);
@@ -15,94 +15,13 @@ const CheckoutPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [order, setOrder] = useState({
-    customerId: "",
-    address: {
-      address: "",
-      coordonates: {
-        lat: 0,
-        long: 0,
-      },
-    },
-    deliveryPersonId: "",
-    content: [
-      {
-        name: "",
-        price: 0,
-        photo: "",
-        quantity: 0,
-      },
-    ],
+  const [form, setForm] = useState({
+    email: auth.user ? auth.user.email : "",
+    name: auth.user ? `${auth.user.firstname} ${auth.user.lastname}` : "",
+    address: auth.user ? auth.user.address.address : "",
+    content: orderData,
     totalPrice: 0,
-    status: "FREE",
-    code: "",
   });
-
-  const openModal = () => {
-    setIsModalOpen(true);
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    if (name.startsWith("content.")) {
-      const [_, index, fieldName] = name.split(".");
-      const contentIndex = parseInt(index, 10);
-
-      setOrder((prevOrder) => {
-        const updatedContent = [...prevOrder.content];
-        updatedContent[contentIndex] = {
-          ...updatedContent[contentIndex],
-          [fieldName]: value,
-        };
-
-        return {
-          ...prevOrder,
-          content: updatedContent,
-        };
-      });
-    } else {
-      setOrder({
-        ...order,
-        [name]: value,
-      });
-    }
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:4400/api/orders/add",
-        order
-      );
-
-      setOrder({
-        customerId: "",
-        address: {
-          address: "",
-          coordonates: {
-            lat: 0,
-            long: 0,
-          },
-        },
-        deliveryPersonId: "",
-        content: [],
-        totalPrice: 0,
-        status: "FREE",
-        code: "",
-      });
-
-      setIsModalOpen(false);
-      navigate("/");
-    } catch (error) {
-      console.error("Erreur lors de la requête POST:", error);
-    }
-  };
 
   const calculateTotal = () => {
     let subtotal = 0;
@@ -119,17 +38,34 @@ const CheckoutPage = () => {
 
     const total = subtotal + shippingFee;
 
-    console.log(total, subtotal, shippingFee, ` <== total`);
-
     return { total: total.toFixed(2), subtotal };
   };
 
-  // useEffect(() => {
-  //   const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
-  //   const orderData = JSON.parse(localStorage.getItem(isLogged));
-  //   setOrderCart(orderData);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  const onSuccess = (payload) => {
+    console.log(payload);
+  };
+
+  const { mutate } = useCreateOrder(
+    { ...form, totalPrice: calculateTotal().total },
+    onSuccess
+  );
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  };
+
+  const handleSubmit = () => {
+    mutate({ ...form, totalPrice: calculateTotal().total });
+  };
 
   return (
     <Layout title="Express Food | Paiement">
@@ -146,29 +82,13 @@ const CheckoutPage = () => {
                   class="m-2 h-24 w-28 rounded-md border object-cover object-center"
                   src={item.photo}
                   alt="img"
-                  value={orderData[index].photo}
-                  onChange={handleChange}
                 />
                 <div class="flex w-full flex-col px-4 py-4">
-                  <span
-                    class="font-semibold"
-                    value={orderData[index].name}
-                    onChange={handleChange}
-                  >
-                    {item.name}
-                  </span>
-                  <span
-                    class="float-right text-gray-400"
-                    value={orderData[index].quantity}
-                    onChange={handleChange}
-                  >
+                  <span class="font-semibold">{item.name}</span>
+                  <span class="float-right text-gray-400">
                     Quantité : {item.quantity}
                   </span>
-                  <p
-                    class="text-lg font-bold"
-                    value={orderData[index].price}
-                    onChange={handleChange}
-                  >
+                  <p class="text-lg font-bold">
                     {`${(item.price * item.quantity).toFixed(2)} `} €
                   </p>
                 </div>
@@ -189,10 +109,12 @@ const CheckoutPage = () => {
               <input
                 type="text"
                 id="card-no"
-                name="card-no"
                 class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Email"
                 required
+                name="email"
+                value={form.email}
+                onChange={handleChange}
               />
             </div>
             <label
@@ -205,10 +127,12 @@ const CheckoutPage = () => {
               <input
                 type="text"
                 id="card-holder"
-                name="card-holder"
                 class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm  shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Votre nom"
                 required
+                name="name"
+                value={form.name}
+                onChange={handleChange}
               />
             </div>
             <label for="card-no" class="mt-4 mb-2 block text-sm font-medium">
@@ -250,23 +174,15 @@ const CheckoutPage = () => {
               Adresse de livraison
             </label>
             <div class="flex flex-col sm:flex-row">
-              <div class="relative flex-shrink-0 sm:w-7/12">
-                <input
-                  type="text"
-                  id="billing-address"
-                  name="billing-address"
-                  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="Adresse de livraison"
-                  required
-                />
-              </div>
               <input
-                type="number"
-                name="billing-zip"
-                class="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="Code postal"
-                maxlength="5"
+                type="text"
+                id="billing-address"
+                class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                placeholder="Adresse de livraison"
                 required
+                name="address"
+                value={form.address}
+                onChange={handleChange}
               />
             </div>
 
