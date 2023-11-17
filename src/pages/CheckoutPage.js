@@ -195,7 +195,7 @@ const CheckoutPage = () => {
               </div>
               <div class="flex items-center justify-between">
                 <p class="text-sm font-medium text-gray-900">Livraison</p>
-                {calculateTotal().subtotal > 20 ? (
+                {calculateTotal().subtotal > 19.99 ? (
                   <p class="font-semibold text-gray-900">Gratuit</p>
                 ) : (
                   <p class="font-semibold text-gray-900">{`2.99 €`}</p>
