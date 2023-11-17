@@ -61,14 +61,13 @@ const App = () => {
   useEffect(() => {
     const delay = setTimeout(() => {
       setShowLoading(false);
-    }, 500); 
+    }, 500);
 
     return () => clearTimeout(delay);
-  }, [isLoading]);
+  }, [isCurrentUserLoading, isGetLatestOrderLoading]);
 
-  if (showLoading || isCurrentUserLoading || isGetLatestOrderLoading) return (
-        <LoadingAnimation />
-  );
+  if (showLoading || isCurrentUserLoading || isGetLatestOrderLoading)
+    return <LoadingAnimation />;
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
