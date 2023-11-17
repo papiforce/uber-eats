@@ -59,7 +59,6 @@ const OrderCardAdmin = ({ order }) => {
               <option value="PENDING_DELIVERY">En attente de livraison</option>
               <option value="DELIVERED">Livré</option>
               <option value="CANCELED">Annulé</option>
-              <option value="UNKNOWN">Statut inconnu</option>
             </select>
           </p>
         </div>
