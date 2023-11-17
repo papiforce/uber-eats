@@ -21,7 +21,7 @@ import DeliveryPage from "pages/DeliveryPage";
 import DeliveryOrdersPage from "pages/DeliveryOrdersPage";
 import OrderListPage from "pages/OrderListPage";
 import { useGetLatestOrder } from "api/orderQueries";
-import OrderListAdmin from "pages/OrderListAdminPage";
+import OrderListAdminPage from "pages/OrderListAdminPage";
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -169,7 +169,7 @@ const App = () => {
               path="/dashboard/orders"
               element={
                 <SecurityGuard adminRedirectionPath="/">
-                  <OrderListAdmin />
+                  <OrderListAdminPage />
                 </SecurityGuard>
               }
             />

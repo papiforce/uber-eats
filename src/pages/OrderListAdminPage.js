@@ -7,10 +7,11 @@ export default function OrderListAdminPage() {
   const [orders, setOrders] = useState([]);
 
   const onGetOrderSuccess = (payload) => {
-    setOrders(payload);
+    setOrders(payload.free.concat(payload.pending, payload.finish));
   };
 
-  useGetOrders("?onlyActive=false", onGetOrderSuccess);
+  useGetOrders("", onGetOrderSuccess);
+
   return (
     <div>
       <Layout>
