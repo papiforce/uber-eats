@@ -3,8 +3,9 @@ import { queryClient } from "index";
 import React, { useState } from "react";
 
 export default function OrderCardAdmin({ order }) {
-  const dateCreated = new Date(order.createdAt);
+  const [editedOrderStatus, setEditedOrderStatus] = useState([]);
 
+  const dateCreated = new Date(order.createdAt);
   const dateCreatedFormated = dateCreated.toLocaleDateString("fr-FR", {
     year: "numeric",
     month: "numeric",
@@ -14,8 +15,6 @@ export default function OrderCardAdmin({ order }) {
     hour: "2-digit",
     minute: "2-digit",
   });
-
-  const [editedOrderStatus, setEditedOrderStatus] = useState([]);
 
   const onUpdateOrderStatusSuccess = () => {
     queryClient.invalidateQueries(["getOrders"]);
@@ -37,8 +36,7 @@ export default function OrderCardAdmin({ order }) {
           </p>
 
           <p class="text-xl font-medium text-gray-900 truncate dark:text-white">
-            Client :{" "}
-            {order.customerId.lastname} {order.customerId.firstname}
+            Client : {order.customerId.lastname} {order.customerId.firstname}
           </p>
 
           <p class="text-xl font-medium text-gray-900 truncate dark:text-white">
@@ -49,13 +47,13 @@ export default function OrderCardAdmin({ order }) {
             <select
               name="type"
               className="border border-gray-300 rounded-md text-dark w-50 focus:outline-none p-2 mr-2"
-              value={order.status}
+              value={editedOrderStatus.status}
               onChange={(e) => {
                 setEditedOrderStatus({
                   ...editedOrderStatus,
                   status: e.target.value,
                 });
-                mutate({ status: e.target.value });
+                mutate(e.target.value);
               }}
             >
               <option value="FREE">Gratuit</option>
