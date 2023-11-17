@@ -40,9 +40,12 @@ const DeliveryOrdersPage = () => {
 
           {orders && orders.free.length > 0 && (
             <>
-              <p>En attente</p>
+              <p className="mt-3 border-none">En attente</p>
               {orders.free.map((order, index) => (
-                <div key={`free-${index}`}>
+                <div
+                  className="border border-secondary rounded"
+                  key={`free-${index}`}
+                >
                   <OrderListCard
                     order={order}
                     key={order._id}
@@ -56,9 +59,12 @@ const DeliveryOrdersPage = () => {
 
           {orders && orders.pending.length > 0 && (
             <>
-              <p>Livraisons en cours</p>
+              <p className="mt-3 border-none">Livraisons en cours</p>
               {orders.pending.map((order, index) => (
-                <div key={`pending-${index}`}>
+                <div
+                  className="border border-secondary rounded mt-2"
+                  key={`pending-${index}`}
+                >
                   <OrderListCard
                     order={order}
                     key={order._id}
@@ -72,9 +78,12 @@ const DeliveryOrdersPage = () => {
 
           {orders && orders.finish.length > 0 && (
             <>
-              <p>Livraisons terminées</p>
+              <p className="mt-3 border-none">Livraisons terminées</p>
               {orders.finish.map((order, index) => (
-                <div key={`finish-${index}`}>
+                <div
+                  className="border border-secondary rounded"
+                  key={`finish-${index}`}
+                >
                   <OrderListCard
                     order={order}
                     key={order._id}
