@@ -9,10 +9,10 @@ const FreeOrdersPage = () => {
   const [selectedOrder, setselectedOrder] = useState(null);
 
   const onGetOrdersSuccess = (payload) => {
-    setOrders(payload);
+    setOrders(payload.free);
   };
 
-  useGetOrders({ onlyActive: false }, onGetOrdersSuccess);
+  useGetOrders("", onGetOrdersSuccess);
 
   useEffect(() => {
     if (updateOrderSuccess) {
@@ -25,14 +25,18 @@ const FreeOrdersPage = () => {
     <Layout>
       <div className="w-full max-w-6xl mx-auto bg-white border border-gray-200 mt-5 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
         <ul className="divide-y">
-          {orders.map((order) => (
-            <OrderListCard
-              order={order}
-              key={order._id}
-              update={setupdateOrderSuccesss}
-              selected={setselectedOrder}
-            />
-          ))}
+          {orders.length > 0 ? (
+            orders.map((order) => (
+              <OrderListCard
+                order={order}
+                key={order._id}
+                update={setupdateOrderSuccesss}
+                selected={setselectedOrder}
+              />
+            ))
+          ) : (
+            <p className="mx-auto my-0 max-w-max">Aucune commande en attente</p>
+          )}
         </ul>
       </div>
     </Layout>

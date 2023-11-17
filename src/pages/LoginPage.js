@@ -49,7 +49,7 @@ const LoginPage = () => {
   return (
     <Layout title="Express Food | Connexion">
       <div className="flex min-h-[calc(100vh_-_85px)] lg:items-center lg:justify-center bg-gray-50">
-        <div className="rounded-lg bg-gray-50 shadow-xl px-16 py-16 lg:w-6/12">
+        <div className="rounded-lg bg-gray-50 shadow-xl px-16 py-16 w-full">
           <div className="flex flex-col">
             <h3 className="my-4 text-center text-3xl font-semibold text-black">
               Connexion
