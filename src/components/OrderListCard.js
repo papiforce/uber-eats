@@ -4,7 +4,6 @@ import { Button, ButtonGroup } from "@material-tailwind/react";
 import { updateOrderStatusDelivery } from "api/orderQueries";
 
 const OrderListCard = ({ order, update, selected }) => {
-  console.log(order)
   const handleSelect = async () => {
     try {
       const checkUpdate = await updateOrderStatusDelivery(
@@ -21,11 +20,13 @@ const OrderListCard = ({ order, update, selected }) => {
   return (
     <li className="p-4">
       <div className="flex flex-row justify-center px-5">
-        {order.status === "FREE" && <ButtonGroup className="flex-nowrap">
-          <Button onClick={handleSelect}>
-            <FontAwesomeIcon icon={faCheckCircle} />
-          </Button>
-        </ButtonGroup>}
+        {order.status === "FREE" && (
+          <ButtonGroup className="flex-nowrap">
+            <Button onClick={handleSelect}>
+              <FontAwesomeIcon icon={faCheckCircle} />
+            </Button>
+          </ButtonGroup>
+        )}
       </div>
       <div>
         <p>Commande ID {order._id}</p>
