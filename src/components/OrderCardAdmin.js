@@ -68,7 +68,11 @@ const OrderCardAdmin = ({ order }) => {
         <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
           <ul>
             {order.content.map((product, index) => {
-              return <li>{product.name + " X " + product.quantity}</li>;
+              return (
+                <li key={`${product.name}-${index}`}>
+                  {product.name + " X " + product.quantity}
+                </li>
+              );
             })}
             <li className="mt-5 text-end fs-4">{order.totalPrice} €</li>
           </ul>
