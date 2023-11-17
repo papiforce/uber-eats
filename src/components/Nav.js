@@ -181,6 +181,24 @@ const Nav = () => {
                     Commande en cours
                   </Button>
                 )}
+                  <Button
+                    variant="filled"
+                    className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
+                    onClick={() => navigate("/orders")}
+                  >
+                    Mes commandes
+                  </Button> 
+
+                {/* {auth.user.role === "MEMBER" && (
+                     <Button
+                     variant="filled"
+                     className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
+                     onClick={() => navigate("/current-order")}
+                   >
+                     MES COMMANDES
+                   </Button>
+                 )}   
+                } */}
 
                 <Button
                   size="sm"
@@ -279,6 +297,7 @@ const Nav = () => {
               )}
 
               {latestOrder && (
+               <> 
                 <Button
                   variant="filled"
                   className="bg-white text-black border w-full mt-2"
@@ -286,6 +305,14 @@ const Nav = () => {
                 >
                   Commande en cours
                 </Button>
+                <Button
+                  variant="filled"
+                  className="bg-white text-black border w-full mt-2"
+                  onClick={() => navigate("/orders")}
+                >
+                  Mes commandes
+                </Button>
+                </>
               )}
               <Button
                 size="sm"
