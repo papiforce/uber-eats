@@ -20,11 +20,15 @@ const OrderCardAdmin = ({ order }) => {
     queryClient.invalidateQueries(["getOrders"]);
   };
 
-  const { mutate } = useUpdateOrderStatusAdmin(
-    order._id,
-    editedOrderStatus.status,
-    onUpdateOrderStatusSuccess
-  );
+  const { mutate } = useUpdateOrderStatusAdmin(onUpdateOrderStatusSuccess);
+
+  const handleSelect = (e) => {
+    setEditedOrderStatus({
+      ...editedOrderStatus,
+      status: e.target.value,
+    });
+    mutate({ orderId: order._id, status: e.target.value });
+  };
 
   return (
     <li className="p-4">
@@ -48,20 +52,13 @@ const OrderCardAdmin = ({ order }) => {
               name="type"
               className="border border-gray-300 rounded-md text-dark w-50 focus:outline-none p-2 mr-2"
               value={editedOrderStatus.status}
-              onChange={(e) => {
-                setEditedOrderStatus({
-                  ...editedOrderStatus,
-                  status: e.target.value,
-                });
-                mutate(e.target.value);
-              }}
+              onChange={handleSelect}
             >
               <option value="ORDER_PREPARATION">En préparation</option>
               <option value="READY">Prêt</option>
               <option value="PENDING_DELIVERY">En attente de livraison</option>
               <option value="DELIVERED">Livré</option>
               <option value="CANCELED">Annulé</option>
-              <option value="UNKNOWN">Statut inconnu</option>
             </select>
           </p>
         </div>
