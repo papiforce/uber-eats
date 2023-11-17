@@ -13,6 +13,7 @@ import RegisterPage from "pages/RegisterPage";
 import LoginPage from "pages/LoginPage";
 import AddProductPage from "pages/AddProductPage";
 import AdminPage from "pages/AdminPage";
+import CheckoutPage from "pages/CheckoutPage";
 import ProductListPage from "pages/ProductListPage";
 import DeliveryPage from "pages/DeliveryPage";
 import FreeOrdersPage from "pages/FreeOrdersPage";
@@ -95,6 +96,16 @@ const App = () => {
             }
           />
           <Route
+            exact
+            path="/payment"
+            element={
+              <SecurityGuard unloggedRedirectionPath="/">
+                <CheckoutPage />
+              </SecurityGuard>
+            }
+          />
+          <Route
+            exact
             path="/dashboard/products"
             element={
               <SecurityGuard adminRedirectionPath="/">

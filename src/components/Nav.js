@@ -128,7 +128,7 @@ const Nav = () => {
               </div>
             ) : (
               <>
-                {auth.user.role === "ADMIN" && (
+                {auth.user && auth.user.role === "ADMIN" && (
                   <Button
                     size="sm"
                     className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
@@ -217,7 +217,7 @@ const Nav = () => {
             </>
           ) : (
             <>
-              {auth.user.role === "ADMIN" && (
+              {auth.user && auth.user.role === "ADMIN" && (
                 <Button
                   size="sm"
                   className="bg-white text-black border w-full"
