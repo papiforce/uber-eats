@@ -27,19 +27,19 @@ const OrderCard = ({ order }) => {
       : "Statut inconnu";
 
   return (
-    <li class="p-4">
-      <div class="flex items-center space-x-4 rtl:space-x-reverse">
-        <div class="flex-shrink-0"></div>
-        <div class="flex-1 min-w-0">
-          <p class="text-xl font-medium text-gray-900 truncate dark:text-white">
+    <li className="p-4">
+      <div className="flex items-center space-x-4 rtl:space-x-reverse">
+        <div className="flex-shrink-0"></div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xl font-medium text-gray-900 truncate dark:text-white">
             Date de commande : {dateCreatedFormated} à {hourCreatedFormatted}
           </p>
 
-          <p class="text-md text-gray-500 truncate dark:text-gray-400">
+          <p className="text-md text-gray-500 truncate dark:text-gray-400">
             {statusText}
           </p>
         </div>
-        <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+        <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
           <ul>
             {order.content.map((product, index) => {
               return (

@@ -69,26 +69,26 @@ const CheckoutPage = () => {
 
   return (
     <Layout title="Express Food | Paiement">
-      <div class="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
-        <div class="px-4 pt-8">
-          <p class="text-xl font-medium">Votre commande :</p>
-          <div class="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
+      <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
+        <div className="px-4 pt-8">
+          <p className="text-xl font-medium">Votre commande :</p>
+          <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
             {orderData.map((item, index) => (
               <div
                 key={item.id}
-                class="flex flex-col rounded-lg bg-white sm:flex-row"
+                className="flex flex-col rounded-lg bg-white sm:flex-row"
               >
                 <img
-                  class="m-2 h-24 w-28 rounded-md border object-cover object-center"
+                  className="m-2 h-24 w-28 rounded-md border object-cover object-center"
                   src={item.photo}
                   alt="img"
                 />
-                <div class="flex w-full flex-col px-4 py-4">
-                  <span class="font-semibold">{item.name}</span>
-                  <span class="float-right text-gray-400">
+                <div className="flex w-full flex-col px-4 py-4">
+                  <span className="font-semibold">{item.name}</span>
+                  <span className="float-right text-gray-400">
                     Quantité : {item.quantity}
                   </span>
-                  <p class="text-lg font-bold">
+                  <p className="text-lg font-bold">
                     {`${(item.price * item.quantity).toFixed(2)} `} €
                   </p>
                 </div>
@@ -96,20 +96,20 @@ const CheckoutPage = () => {
             ))}
           </div>
         </div>
-        <div class="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-          <p class="text-xl font-medium">Détails du paiement</p>
-          <p class="text-gray-400">
+        <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
+          <p className="text-xl font-medium">Détails du paiement</p>
+          <p className="text-gray-400">
             Veuillez complètez les informations requises.
           </p>
-          <div class="">
-            <label for="email" class="mt-4 mb-2 block text-sm font-medium">
+          <div className="">
+            <label for="email" className="mt-4 mb-2 block text-sm font-medium">
               Email
             </label>
-            <div class="relative">
+            <div className="relative">
               <input
                 type="text"
                 id="card-no"
-                class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Email"
                 required
                 name="email"
@@ -119,15 +119,15 @@ const CheckoutPage = () => {
             </div>
             <label
               for="card-holder"
-              class="mt-4 mb-2 block text-sm font-medium"
+              className="mt-4 mb-2 block text-sm font-medium"
             >
               Nom du titulaire de la carte
             </label>
-            <div class="relative">
+            <div className="relative">
               <input
                 type="text"
                 id="card-holder"
-                class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm  shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm  shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Votre nom"
                 required
                 name="name"
@@ -135,16 +135,19 @@ const CheckoutPage = () => {
                 onChange={handleChange}
               />
             </div>
-            <label for="card-no" class="mt-4 mb-2 block text-sm font-medium">
+            <label
+              for="card-no"
+              className="mt-4 mb-2 block text-sm font-medium"
+            >
               Informations de la carte
             </label>
-            <div class="flex">
-              <div class="relative w-7/12 flex-shrink-0">
+            <div className="flex">
+              <div className="relative w-7/12 flex-shrink-0">
                 <input
                   type="number"
                   id="card-no"
                   name="card-no"
-                  class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="xxxx-xxxx-xxxx-xxxx"
                   min="19"
                   required
@@ -153,7 +156,7 @@ const CheckoutPage = () => {
               <input
                 type="text"
                 name="credit-expiry"
-                class="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="MM/YY"
                 maxlength="5"
                 required
@@ -161,7 +164,7 @@ const CheckoutPage = () => {
               <input
                 type="number"
                 name="credit-cvc"
-                class="w-1/6 flex-shrink-0 rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                className="w-1/6 flex-shrink-0 rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="CVC"
                 maxlength="3"
                 required
@@ -169,15 +172,15 @@ const CheckoutPage = () => {
             </div>
             <label
               for="billing-address"
-              class="mt-4 mb-2 block text-sm font-medium"
+              className="mt-4 mb-2 block text-sm font-medium"
             >
               Adresse de livraison
             </label>
-            <div class="flex flex-col sm:flex-row">
+            <div className="flex flex-col sm:flex-row">
               <input
                 type="text"
                 id="billing-address"
-                class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Adresse de livraison"
                 required
                 name="address"
@@ -186,32 +189,32 @@ const CheckoutPage = () => {
               />
             </div>
 
-            <div class="mt-6 border-t border-b py-2">
-              <div class="flex items-center justify-between">
-                <p class="text-sm font-medium text-gray-900">Sous-total</p>
-                <p class="font-semibold text-gray-900">
+            <div className="mt-6 border-t border-b py-2">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium text-gray-900">Sous-total</p>
+                <p className="font-semibold text-gray-900">
                   {calculateTotal().subtotal} €
                 </p>
               </div>
-              <div class="flex items-center justify-between">
-                <p class="text-sm font-medium text-gray-900">Livraison</p>
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium text-gray-900">Livraison</p>
                 {calculateTotal().subtotal > 19.99 ? (
-                  <p class="font-semibold text-gray-900">Gratuit</p>
+                  <p className="font-semibold text-gray-900">Gratuit</p>
                 ) : (
-                  <p class="font-semibold text-gray-900">2.99 €</p>
+                  <p className="font-semibold text-gray-900">2.99 €</p>
                 )}
               </div>
             </div>
-            <div class="mt-6 flex items-center justify-between">
-              <p class="text-sm font-medium text-gray-900">Total</p>
-              <p class="text-2xl font-semibold text-gray-900">{`${
+            <div className="mt-6 flex items-center justify-between">
+              <p className="text-sm font-medium text-gray-900">Total</p>
+              <p className="text-2xl font-semibold text-gray-900">{`${
                 calculateTotal().total
               } €`}</p>
             </div>
           </div>
           <button
             onClick={handleSubmit}
-            class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
+            className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
           >
             Commander
           </button>
