@@ -41,8 +41,15 @@ const CheckoutPage = () => {
     return { total: total.toFixed(2), subtotal };
   };
 
-  const onSuccess = (payload) => {
-    console.log(payload);
+  const onSuccess = () => {
+    setIsModalOpen(true);
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsModalOpen(false);
+      navigate("/orders");
+    }, 2000);
   };
 
   const { mutate } = useCreateOrder(
@@ -52,15 +59,6 @@ const CheckoutPage = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
   };
 
   const handleSubmit = () => {
@@ -222,15 +220,10 @@ const CheckoutPage = () => {
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
           <div className="bg-white p-8 w-96">
             {isLoading ? (
-              <p className="text-center">Chargement en cours...</p>
-            ) : (
-              <div>
-                <h2 className="text-2xl text-center  font-semibold mb-4">
-                  Votre paiement a été confirmé, <br></br> redirection en
-                  cours...
-                </h2>
-              </div>
-            )}
+              <h2 className="text-2xl text-center font-semibold mb-4">
+                Votre paiement a été confirmé, <br /> redirection en cours...
+              </h2>
+            ) : null}
           </div>
         </div>
       )}
