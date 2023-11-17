@@ -37,9 +37,10 @@ const updateOrderStatusDelivery = async (orderId, status, code) => {
   return data;
 };
 
-const updateOrderStatusAdmin = async (orderId, status) => {
+const updateOrderStatusAdmin = async (orderId, status, code) => {
   const { data } = await axiosInstance.put(`/orders/update-status/${orderId}`, {
     status,
+    code,
   });
 
   return data;
@@ -74,8 +75,8 @@ export const useUpdateOrderStatusDelivery = (
   });
 };
 
-export const useUpdateOrderStatusAdmin = (orderId, status, onSuccess) => {
-  return useMutation(() => updateOrderStatusAdmin(orderId, status), {
+export const useUpdateOrderStatusAdmin = (orderId, status, code, onSuccess) => {
+  return useMutation(() => updateOrderStatusAdmin(orderId, status, code), {
     onSuccess,
   });
 };
