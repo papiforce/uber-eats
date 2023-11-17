@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cookies from "js-cookie";
-import axios from "axios";
 import { AuthContext } from "contexts/AuthContext";
 import { OrderContext } from "contexts/OrderContext";
 import { useCurrentUser } from "api/authQueries";
@@ -19,16 +18,16 @@ import ProductListPage from "pages/ProductListPage";
 import UsersListPage from "pages/UsersListPage";
 import DeliveryPage from "pages/DeliveryPage";
 import FreeOrdersPage from "pages/FreeOrdersPage";
+import { useGetLatestOrder } from "api/orderQueries";
 
 const App = () => {
   const [auth, setAuth] = useState({
     isAuthenticated: Cookies.get("fe-token") ? true : false,
     user: null,
   });
+  const [latestOrder, setLatestOrder] = useState(null);
 
-  const [orderConfirmed, setorderConfirmed] = useState(null);
-
-  const onSuccess = (payload) => {
+  const onGetCurrentUserSuccess = (payload) => {
     setAuth({ isAuthenticated: true, user: payload });
   };
 
@@ -37,39 +36,29 @@ const App = () => {
     setAuth({ isAuthenticated: false, user: null });
   };
 
-  const { isLoading } = useCurrentUser(onSuccess, onError);
+  const onGetLatestOrderSuccess = (payload) => {
+    setLatestOrder(payload);
+  };
 
-  useEffect(() => {
-    if (auth.isAuthenticated) {
-      const fetchLatestOrder = async () => {
-        const access_token = Cookies.get("fe-token");
+  const onGetLatestOrderError = () => {
+    setLatestOrder(null);
+  };
 
-        return await axios.get("http://localhost:4400/api/orders/latest", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,
-          },
-        });
-      };
+  const { isLoading: isCurrentUserLoading } = useCurrentUser(
+    onGetCurrentUserSuccess,
+    onError
+  );
 
-      const updateOrder = async () => {
-        const response = await fetchLatestOrder();
-        if (response.data.success) {
-          setorderConfirmed(response.data);
-        }
-      };
+  const { isLoading: isGetLatestOrderLoading } = useGetLatestOrder(
+    onGetLatestOrderSuccess,
+    onGetLatestOrderError
+  );
 
-      setTimeout(() => {
-        updateOrder();
-      }, 3000);
-    }
-  }, [auth.isAuthenticated]);
-
-  if (isLoading) return <>LOADING...</>;
+  if (isCurrentUserLoading || isGetLatestOrderLoading) return <>LOADING...</>;
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
-      <OrderContext.Provider value={{ orderConfirmed, setorderConfirmed }}>
+      <OrderContext.Provider value={{ latestOrder, setLatestOrder }}>
         <Router>
           <Routes>
             <Route exact path="/" element={<HomePage />} />

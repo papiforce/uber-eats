@@ -4,25 +4,25 @@ import { Button, ButtonGroup } from "@material-tailwind/react";
 import { updateOrderStatusDelivery } from "api/orderQueries";
 
 const OrderListCard = ({ order, update, selected }) => {
-  const handleSelect = async () => {
-    try {
-      const checkUpdate = await updateOrderStatusDelivery(
-        order._id,
-        "ORDER_PREPARATION"
-      );
-      if (checkUpdate.success) {
-        update(true);
-        selected(order._id);
-      }
-    } catch (err) {}
-  };
+  // const handleSelect = async () => {
+  //   try {
+  //     const checkUpdate = await updateOrderStatusDelivery(
+  //       order._id,
+  //       "ORDER_PREPARATION"
+  //     );
+  //     if (checkUpdate.success) {
+  //       update(true);
+  //       selected(order._id);
+  //     }
+  //   } catch (err) {}
+  // };
 
   return (
     <li className="p-4">
       <div className="flex flex-row justify-center px-5">
         {order.status === "FREE" && (
           <ButtonGroup className="flex-nowrap">
-            <Button onClick={handleSelect}>
+            <Button>
               <FontAwesomeIcon icon={faCheckCircle} />
             </Button>
           </ButtonGroup>

@@ -21,7 +21,8 @@ import { OrderContext } from "contexts/OrderContext";
 
 const Nav = () => {
   const { auth, setAuth } = useContext(AuthContext);
-  const { orderConfirmed } = useContext(OrderContext);
+  const { latestOrder } = useContext(OrderContext);
+
   const navigate = useNavigate();
 
   const [openNav, setOpenNav] = useState(false);
@@ -51,6 +52,15 @@ const Nav = () => {
     }
 
     if (actionType === "LESS") {
+      if (productToUpdate.quantity === 1) {
+        const updatedCart = parseCart.filter(
+          (subItem) => subItem.id !== productId
+        );
+
+        setCurrentCart(updatedCart);
+        return localStorage.setItem(isLogged, JSON.stringify(updatedCart));
+      }
+
       productToUpdate.quantity -= 1;
       parseCart[parseCart.indexOf(productToUpdate)] = productToUpdate;
     }
@@ -145,19 +155,20 @@ const Nav = () => {
                   </Button>
                 )}
 
-                {(auth.user.role === "ADMIN" ||
-                  auth.user.role === "DELIVERY_PERSON") && (
-                  <Button
-                    size="sm"
-                    className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
-                    onClick={() => navigate("/delivery-dashboard")}
-                  >
-                    <FontAwesomeIcon icon={faListAlt} />
-                    <span> Liste des commandes </span>
-                  </Button>
-                )}
+                {auth.user &&
+                  (auth.user.role === "ADMIN" ||
+                    auth.user.role === "DELIVERY_PERSON") && (
+                    <Button
+                      size="sm"
+                      className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
+                      onClick={() => navigate("/delivery-dashboard")}
+                    >
+                      <FontAwesomeIcon icon={faListAlt} />
+                      <span> Liste des commandes </span>
+                    </Button>
+                  )}
 
-                {orderConfirmed && (
+                {latestOrder && (
                   <Button
                     variant="filled"
                     onClick={() => navigate("/current-order")}
