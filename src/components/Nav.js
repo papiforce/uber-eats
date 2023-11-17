@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import {
   Navbar,
-  MobileNav,
   Typography,
   Button,
   IconButton,
+  Collapse,
 } from "@material-tailwind/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faListAlt } from "@fortawesome/free-regular-svg-icons";
@@ -171,13 +171,14 @@ const Nav = () => {
                       onClick={() => navigate("/delivery-dashboard")}
                     >
                       <FontAwesomeIcon icon={faListAlt} />
-                      <span> Liste des commandes </span>
+                      <span> Liste des livraisons </span>
                     </Button>
                   )}
 
                 {latestOrder && (
                   <Button
                     variant="filled"
+                    className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
                     onClick={() => navigate("/current-order")}
                   >
                     Commande en cours
@@ -197,7 +198,7 @@ const Nav = () => {
                 </Button>
                 <Button
                   size="sm"
-                  className="bg-transparant text-dark rounded-full"
+                  className="bg-danger text-white rounded-full"
                   onClick={logout}
                 >
                   <FontAwesomeIcon icon={faRightFromBracket} />
@@ -238,7 +239,7 @@ const Nav = () => {
             </IconButton>
           </div>
         </div>
-        <MobileNav open={openNav}>
+        <Collapse open={openNav}>
           {!auth.isAuthenticated ? (
             <>
               <Button
@@ -251,7 +252,7 @@ const Nav = () => {
               </Button>
               <Button
                 variant="sm"
-                className="bg-white text-black border w-full"
+                className="bg-white text-black border w-full mt-2"
                 onClick={() => navigate("/register")}
               >
                 <span>Inscription</span>
@@ -260,25 +261,45 @@ const Nav = () => {
           ) : (
             <>
               {auth.user && auth.user.role === "ADMIN" && (
+                <>
+                  <Button
+                    size="sm"
+                    className="bg-white text-black border w-full mt-2"
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                    <span> Admin </span>
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="bg-white text-black border w-full mt-2"
+                    onClick={() => navigate("/delivery-dashboard")}
+                  >
+                    <FontAwesomeIcon icon={faListAlt} />
+                    <span> Liste des livraisons </span>
+                  </Button>
+                </>
+              )}
+
+              {latestOrder && (
                 <Button
-                  size="sm"
-                  className="bg-white text-black border w-full"
-                  onClick={() => navigate("/dashboard")}
+                  variant="filled"
+                  className="bg-white text-black border w-full mt-2"
+                  onClick={() => navigate("/current-order")}
                 >
-                  <FontAwesomeIcon icon={faUser} />
-                  <span> Admin </span>
+                  Commande en cours
                 </Button>
               )}
               <Button
                 size="sm"
-                className="bg-transparant text-dark rounded-full"
+                className="bg-danger text-white border w-full mt-2"
                 onClick={logout}
               >
                 <FontAwesomeIcon icon={faRightFromBracket} />
               </Button>
             </>
           )}
-        </MobileNav>
+        </Collapse>
       </Navbar>
 
       <CartModal
