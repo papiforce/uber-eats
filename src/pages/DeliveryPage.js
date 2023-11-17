@@ -4,7 +4,7 @@ import { AuthContext } from "contexts/AuthContext";
 import Layout from "./layouts/Layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
 
 export default function DeliveryPage() {
   const { auth } = useContext(AuthContext);
@@ -32,14 +32,6 @@ export default function DeliveryPage() {
             <h2 class="text-xl font-semibold mb-2">
               Voir les commandes disponibles
             </h2>
-          </div>
-
-          <div
-            class="flex flex-col justify-center items-center gap-8 bg-white m-6 p-6 rounded-md shadow-md mr-4"
-            onClick={() => navigate("/dashboard/product/form")}
-          >
-            <FontAwesomeIcon className="fs-3" icon={faPlus} />
-            <h2 class="text-xl font-semibold mb-2">Valider une commande</h2>
           </div>
         </div>
       </Layout>
