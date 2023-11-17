@@ -2,11 +2,25 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Links for others projects 
+
+- [Github back link](https://github.com/papiforce/uber-eats-back)
+- [Back end deployment link](https://uber-eats-back.vercel.app/api/)
+- [Trello link](https://trello.com/invite/b/7OwShWtD/ATTI612da00f7c1a9d9f988996ff3766d99a47D8AC97/projet-expressfood)
+- [Slides](https://docs.google.com/presentation/d/1GpmR0zC-7TeIQ2KETveI40ZYDypkPlorvdBZHa6GLOY/edit?usp=sharing)
+
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm install`
+
+and
+
+### `npm start` 
+
+for start project
+
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
