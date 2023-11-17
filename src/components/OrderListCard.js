@@ -1,10 +1,7 @@
 import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, ButtonGroup } from "@material-tailwind/react";
-import {
-  useUpdateOrderStatusAdmin,
-  useUpdateOrderStatusDelivery,
-} from "api/orderQueries";
+import { useUpdateOrderStatusDelivery } from "api/orderQueries";
 import { queryClient } from "../index";
 import { useContext, useState } from "react";
 import { AuthContext } from "contexts/AuthContext";

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Alert } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Layout from "./layouts/Layout";
+import { useRegister } from "api/authQueries";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ const RegisterPage = () => {
     email: "",
     address: "",
   });
-
   const [alertMessage, setAlertMessage] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -22,54 +22,27 @@ const RegisterPage = () => {
     }));
   };
 
-  const handleSuccess = () => {
+  const onSuccess = () => {
+    setAlertMessage(null);
     navigate("/login");
   };
 
+  const onError = ({ response }) => {
+    setAlertMessage(response.data.error);
+  };
+
+  const { mutate } = useRegister(onSuccess, onError);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://localhost:4400/api/auth/signup",
-        {
-          firstname: formData.firstname,
-          lastname: formData.lastname,
-          email: formData.email,
-          password: formData.password,
-          address: {
-            address: formData.address,
-          },
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.status === 200) {
-        handleSuccess();
-      } else {
-        setAlertMessage(null);
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setAlertMessage(error.response.data.error);
-      } else if (error.response.status === 500) {
-        setAlertMessage(
-          "Problème lors de l'inscription, vérifiez vos informations"
-        );
-      } else {
-        console.error("Registration failed", error);
-      }
-    }
+
+    mutate(formData);
   };
 
   return (
     <Layout title="Food Express | Inscription">
       <div className="container mx-auto mt-8">
-        <h1 className="text-3xl text-center mb-5 font-semibold mb-4">
-          Inscription
-        </h1>
+        <h1 className="text-3xl text-center font-semibold mb-4">Inscription</h1>
         {alertMessage && <Alert color="black">{alertMessage}</Alert>}
         <form onSubmit={handleSubmit} className="max-w-md mt-5 mx-auto">
           <div className="mb-4">
