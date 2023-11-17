@@ -70,25 +70,25 @@ export default function ProductListCard({ product }) {
   };
 
   return (
-    <li class="p-4">
-      <div class="flex items-center space-x-4 rtl:space-x-reverse">
-        <div class="flex-shrink-0">
+    <li className="p-4">
+      <div className="flex items-center space-x-4 rtl:space-x-reverse">
+        <div className="flex-shrink-0">
           <img
             src={product.photo}
             alt={product.name}
-            class="w-32 h-32 rounded-full"
+            className="w-32 h-32 rounded-full"
             style={{ filter: "revert" }}
           />
         </div>
-        <div class="flex-1 min-w-0">
-          <p class="text-xl font-medium text-gray-900 truncate dark:text-white">
+        <div className="flex-1 min-w-0">
+          <p className="text-xl font-medium text-gray-900 truncate dark:text-white">
             {product.name}
           </p>
-          <p class="text-md text-gray-500 truncate dark:text-gray-400">
+          <p className="text-md text-gray-500 truncate dark:text-gray-400">
             {product.description}
           </p>
         </div>
-        <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+        <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
           <ul>
             <li className="mt-2">Prix : {product.price} </li>
             <li className="mt-2">Quantité : {product.quantity} </li>
@@ -363,11 +363,11 @@ export default function ProductListCard({ product }) {
                             />
                           </div>
                           <div className="mt-4 text-start">
-                            <label class="relative inline-flex items-center mb-5 cursor-pointer">
+                            <label className="relative inline-flex items-center mb-5 cursor-pointer">
                               <input
                                 type="checkbox"
                                 value={editedProduct.isAvailable}
-                                class="sr-only peer"
+                                className="sr-only peer"
                                 checked={editedProduct.isAvailable}
                                 onChange={() =>
                                   setEditedProduct({
@@ -376,8 +376,8 @@ export default function ProductListCard({ product }) {
                                   })
                                 }
                               />
-                              <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-black"></div>
-                              <span class="ms-3 text-sm font-medium text-gray-600 dark:text-gray-500">
+                              <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-black"></div>
+                              <span className="ms-3 text-sm font-medium text-gray-600 dark:text-gray-500">
                                 Visible
                               </span>
                             </label>

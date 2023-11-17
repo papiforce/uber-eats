@@ -7,10 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
-
 const ProductListPage = () => {
   const [products, setProducts] = useState([]);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onGetMenuSuccess = (payload) => {
     setProducts(payload);
@@ -27,8 +26,8 @@ const ProductListPage = () => {
           <FontAwesomeIcon icon={faCirclePlus} /> Ajouter
         </Button>
       </div>
-      <div class="w-full max-w-6xl mx-auto bg-white border  border-gray-200 mt-4 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-        <ul class="divide-y">
+      <div className="w-full max-w-6xl mx-auto bg-white border  border-gray-200 mt-4 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+        <ul className="divide-y">
           {products.map((product) => (
             <ProductListCard product={product} key={product._id} />
           ))}
