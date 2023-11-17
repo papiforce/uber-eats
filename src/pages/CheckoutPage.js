@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { AuthContext } from "contexts/AuthContext";
 import axios from "axios";
-import { useCreateOrder } from "api/orderQueries";
 import { useNavigate } from "react-router-dom";
-
 
 import Layout from "./layouts/Layout";
 
@@ -11,9 +9,11 @@ const CheckoutPage = () => {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
+  const orderData = JSON.parse(localStorage.getItem(isLogged));
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [orderCart, setOrderCart] = useState([]);
 
   const [order, setOrder] = useState({
     customerId: "",
@@ -50,13 +50,12 @@ const CheckoutPage = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    // Si le champ modifié est contenu dans le tableau 'content'
     if (name.startsWith("content.")) {
-      const [_, index, fieldName] = name.split("."); // Ignorer la première partie et obtenir l'index et le nom du champ
-      const contentIndex = parseInt(index, 10); // Convertir l'index en nombre entier
+      const [_, index, fieldName] = name.split(".");
+      const contentIndex = parseInt(index, 10);
 
       setOrder((prevOrder) => {
-        const updatedContent = [...prevOrder.content]; // Créer une copie du tableau 'content'
+        const updatedContent = [...prevOrder.content];
         updatedContent[contentIndex] = {
           ...updatedContent[contentIndex],
           [fieldName]: value,
@@ -77,16 +76,11 @@ const CheckoutPage = () => {
 
   const handleSubmit = async () => {
     try {
-      // Effectuer la requête POST avec Axios
       const response = await axios.post(
         "http://localhost:4400/api/orders/add",
         order
       );
 
-      // Traiter la réponse ici (par exemple, afficher un message de succès)
-      console.log("Réponse de la requête POST:", response.data);
-
-      // Réinitialiser l'état de la commande ou effectuer toute autre action nécessaire après la soumission
       setOrder({
         customerId: "",
         address: {
@@ -103,11 +97,9 @@ const CheckoutPage = () => {
         code: "",
       });
 
-      // Fermer éventuellement le modal ou effectuer d'autres actions
       setIsModalOpen(false);
-      navigate("/"); // Rediriger vers la page d'accueil après la soumission avec succès
+      navigate("/");
     } catch (error) {
-      // Gérer les erreurs ici (par exemple, afficher un message d'erreur)
       console.error("Erreur lors de la requête POST:", error);
     }
   };
@@ -115,7 +107,7 @@ const CheckoutPage = () => {
   const calculateTotal = () => {
     let subtotal = 0;
 
-    orderCart.forEach((item) => {
+    orderData.forEach((item) => {
       subtotal += item.price * item.quantity;
     });
 
@@ -130,12 +122,12 @@ const CheckoutPage = () => {
     return total.toFixed(2);
   };
 
-  useEffect(() => {
-    const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
-    const orderData = JSON.parse(localStorage.getItem(isLogged));
-    setOrderCart(orderData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
+  //   const orderData = JSON.parse(localStorage.getItem(isLogged));
+  //   setOrderCart(orderData);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <Layout title="Express Food | Paiement">
@@ -143,7 +135,7 @@ const CheckoutPage = () => {
         <div class="px-4 pt-8">
           <p class="text-xl font-medium">Votre commande :</p>
           <div class="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-            {orderCart.map((item, index) => (
+            {orderData.map((item, index) => (
               <div
                 key={item.id}
                 class="flex flex-col rounded-lg bg-white sm:flex-row"
@@ -152,22 +144,29 @@ const CheckoutPage = () => {
                   class="m-2 h-24 w-28 rounded-md border object-cover object-center"
                   src={item.photo}
                   alt="img"
-                  value={order.content[index]?.photo || ""}
+                  value={orderData[index].photo}
                   onChange={handleChange}
                 />
                 <div class="flex w-full flex-col px-4 py-4">
-                  <span class="font-semibold"
-                    value={order.content[index]?.name || ""}
+                  <span
+                    class="font-semibold"
+                    value={orderData[index].name}
                     onChange={handleChange}
-                  >{item.name}</span>
-                  <span class="float-right text-gray-400"
-                        value={order.content[index]?.quantity || ""}
-                        onChange={handleChange}>
+                  >
+                    {item.name}
+                  </span>
+                  <span
+                    class="float-right text-gray-400"
+                    value={orderData[index].quantity}
+                    onChange={handleChange}
+                  >
                     Quantité : {item.quantity}
                   </span>
-                  <p class="text-lg font-bold"
-                    value={order.content[index]?.price || ""}
-                    onChange={handleChange}>
+                  <p
+                    class="text-lg font-bold"
+                    value={orderData[index].price}
+                    onChange={handleChange}
+                  >
                     {`${(item.price * item.quantity).toFixed(2)} `} €
                   </p>
                 </div>
