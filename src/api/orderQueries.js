@@ -2,7 +2,13 @@ import { axiosInstance } from "./axiosInstance";
 import { useMutation, useQuery } from "react-query";
 
 const getOrders = async (options) => {
-  const { data } = await axiosInstance.get(`/orders?${options}`);
+  const { data } = await axiosInstance.get(`/orders${options}`);
+
+  return data;
+};
+
+const getLatestOrder = async () => {
+  const { data } = await axiosInstance.get("/orders/latest");
 
   return data;
 };
@@ -19,21 +25,16 @@ const cancelOrder = async (orderId) => {
   return data;
 };
 
-export const updateOrderStatusDelivery = async (orderId, status, code=undefined) => {
-  try {
-    const { data } = await axiosInstance.put(
-      `/orders/update-delivery-status/${orderId}`,
-      {
-        status,
-      }
-    );
-  
-    return data;
+const updateOrderStatusDelivery = async (orderId, status, code) => {
+  const { data } = await axiosInstance.put(
+    `/orders/update-delivery-status/${orderId}`,
+    {
+      status,
+      code,
+    }
+  );
 
-  } catch (e) 
-  
-  {}
-  
+  return data;
 };
 
 const updateOrderStatusAdmin = async (orderId, status) => {
@@ -48,6 +49,10 @@ export const useGetOrders = (options, onSuccess) => {
   return useQuery(["getOrders", options], () => getOrders(options), {
     onSuccess,
   });
+};
+
+export const useGetLatestOrder = (onSuccess, onError) => {
+  return useQuery("latestOrder", getLatestOrder, { onSuccess, onError });
 };
 
 export const useCreateOrder = (onSuccess) => {

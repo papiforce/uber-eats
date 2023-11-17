@@ -17,9 +17,12 @@ import CartModal from "./CartModal";
 import Cookies from "js-cookie";
 
 import { AuthContext } from "contexts/AuthContext";
+import { OrderContext } from "contexts/OrderContext";
 
 const Nav = () => {
   const { auth, setAuth } = useContext(AuthContext);
+  const { latestOrder } = useContext(OrderContext);
+
   const navigate = useNavigate();
 
   const [openNav, setOpenNav] = useState(false);
@@ -49,6 +52,15 @@ const Nav = () => {
     }
 
     if (actionType === "LESS") {
+      if (productToUpdate.quantity === 1) {
+        const updatedCart = parseCart.filter(
+          (subItem) => subItem.id !== productId
+        );
+
+        setCurrentCart(updatedCart);
+        return localStorage.setItem(isLogged, JSON.stringify(updatedCart));
+      }
+
       productToUpdate.quantity -= 1;
       parseCart[parseCart.indexOf(productToUpdate)] = productToUpdate;
     }
@@ -142,17 +154,29 @@ const Nav = () => {
                     <span> Admin </span>
                   </Button>
                 )}
-                {(auth.user.role === "ADMIN" ||
-                  auth.user.role === "DELIVERY_PERSON") && (
+
+                {auth.user &&
+                  (auth.user.role === "ADMIN" ||
+                    auth.user.role === "DELIVERY_PERSON") && (
+                    <Button
+                      size="sm"
+                      className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
+                      onClick={() => navigate("/delivery-dashboard")}
+                    >
+                      <FontAwesomeIcon icon={faListAlt} />
+                      <span> Liste des commandes </span>
+                    </Button>
+                  )}
+
+                {latestOrder && (
                   <Button
-                    size="sm"
-                    className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
-                    onClick={() => navigate("/delivery-dashboard")}
+                    variant="filled"
+                    onClick={() => navigate("/current-order")}
                   >
-                    <FontAwesomeIcon icon={faListAlt} />
-                    <span> Liste des commandes </span>
+                    Commande en cours
                   </Button>
                 )}
+
                 <Button
                   size="sm"
                   className="bg-transparant text-dark rounded-full"

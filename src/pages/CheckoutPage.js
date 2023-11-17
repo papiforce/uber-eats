@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
 import { useCreateOrder } from "api/orderQueries";
+import { OrderContext } from "contexts/OrderContext";
 
 const CheckoutPage = () => {
   const { auth } = useContext(AuthContext);
+  const { setLatestOrder } = useContext(OrderContext);
   const navigate = useNavigate();
 
   const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
@@ -41,14 +43,17 @@ const CheckoutPage = () => {
     return { total: total.toFixed(2), subtotal };
   };
 
-  const onSuccess = () => {
+  const onSuccess = (payload) => {
     setIsModalOpen(true);
     setIsLoading(true);
 
     setTimeout(() => {
       setIsLoading(false);
       setIsModalOpen(false);
-      navigate("/orders");
+      setLatestOrder(payload);
+
+      navigate("/current-order");
+      localStorage.removeItem(`cart-${auth.user._id}`);
     }, 2000);
   };
 
