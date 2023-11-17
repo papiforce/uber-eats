@@ -25,17 +25,16 @@ const cancelOrder = async (orderId) => {
   return data;
 };
 
-const updateOrderStatusDelivery = async (orderId, status, code = undefined) => {
-  try {
-    const { data } = await axiosInstance.put(
-      `/orders/update-delivery-status/${orderId}`,
-      {
-        status,
-      }
-    );
+const updateOrderStatusDelivery = async (orderId, status, code) => {
+  const { data } = await axiosInstance.put(
+    `/orders/update-delivery-status/${orderId}`,
+    {
+      status,
+      code,
+    }
+  );
 
-    return data;
-  } catch (e) {}
+  return data;
 };
 
 const updateOrderStatusAdmin = async (orderId, status) => {
