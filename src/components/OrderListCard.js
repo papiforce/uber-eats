@@ -2,14 +2,8 @@ import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, ButtonGroup } from "@material-tailwind/react";
 import { updateOrderStatusDelivery } from "api/orderQueries";
-import { useState } from "react";
 
 const OrderListCard = ({ order, update, selected }) => {
-  const [editedOrder, setEditedOrder] = useState({
-    id: order._id,
-    status: order.status,
-  });
-
   const handleSelect = async () => {
     try {
       const checkUpdate = await updateOrderStatusDelivery(
@@ -33,7 +27,7 @@ const OrderListCard = ({ order, update, selected }) => {
         </ButtonGroup>
       </div>
       <div>
-        <p>Commande ID {editedOrder.id}</p>
+        <p>Commande ID {order._id}</p>
       </div>
     </li>
   );

@@ -18,6 +18,7 @@ const FreeOrdersPage = () => {
     if (updateOrderSuccess) {
       setOrders(orders.filter((orders) => orders._id !== selectedOrder));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOrder]);
 
   return (
