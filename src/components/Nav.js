@@ -14,6 +14,7 @@ import {
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import CartModal from "./CartModal";
+import BikePNG from '../assets/img/bike.png';
 import Cookies from "js-cookie";
 
 import { AuthContext } from "contexts/AuthContext";
@@ -104,10 +105,18 @@ const Nav = () => {
           <Typography
             as="a"
             href="/"
-            className="mr-4 cursor-pointer py-1.5 text-4xl text-black no-underline"
+            className="cursor-pointer py-1.5 text-4xl text-black no-underline relative"
           >
             EXPRESS <span className="fw-bold"> FOOD</span>
           </Typography>
+          <Typography as="a" href="/">
+            <img
+              className="w-12 m-auto hidden lg:block"
+              alt=""
+              src={BikePNG}
+            />
+          </Typography>
+
           <div className="flex items-center gap-4">
             {!auth.isAuthenticated ? (
               <div className="flex items-center gap-x-1">

@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cookies from "js-cookie";
 import { AuthContext } from "contexts/AuthContext";
@@ -15,6 +15,7 @@ import AdminPage from "pages/AdminPage";
 import CurrentCommand from "pages/CurrentCommand";
 import CheckoutPage from "pages/CheckoutPage";
 import ProductListPage from "pages/ProductListPage";
+import LoadingAnimation from "components/LoadingAnimation";
 import UsersListPage from "pages/UsersListPage";
 import DeliveryPage from "pages/DeliveryPage";
 import DeliveryOrdersPage from "pages/DeliveryOrdersPage";
@@ -28,6 +29,7 @@ const App = () => {
     user: null,
   });
   const [latestOrder, setLatestOrder] = useState(null);
+  const [showLoading, setShowLoading] = useState(true);
 
   const onGetCurrentUserSuccess = (payload) => {
     setAuth({ isAuthenticated: true, user: payload });
@@ -56,7 +58,17 @@ const App = () => {
     onGetLatestOrderError
   );
 
-  if (isCurrentUserLoading || isGetLatestOrderLoading) return <>LOADING...</>;
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      setShowLoading(false);
+    }, 500); 
+
+    return () => clearTimeout(delay);
+  }, [isLoading]);
+
+  if (showLoading || isCurrentUserLoading || isGetLatestOrderLoading) return (
+        <LoadingAnimation />
+  );
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
