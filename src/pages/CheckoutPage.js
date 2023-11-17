@@ -52,10 +52,7 @@ const CheckoutPage = () => {
     }, 2000);
   };
 
-  const { mutate } = useCreateOrder(
-    { ...form, totalPrice: calculateTotal().total },
-    onSuccess
-  );
+  const { mutate } = useCreateOrder(onSuccess);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
