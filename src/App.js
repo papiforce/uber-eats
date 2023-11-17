@@ -98,15 +98,6 @@ const App = () => {
           />
           <Route
             exact
-            path="/dashboard"
-            element={
-              <SecurityGuard adminRedirectionPath="/">
-                <AdminPage />
-              <SecurityGuard />
-            }
-          />
-          <Route
-            exact
             path="/payment"
             element={
               <SecurityGuard unloggedRedirectionPath="/">
@@ -124,7 +115,7 @@ const App = () => {
             }
           />
           <Route
-            path="/dashboard/listUsers"
+            path="/dashboard/users"
             element={
               <SecurityGuard adminRedirectionPath="/">
                 <UsersListPage />

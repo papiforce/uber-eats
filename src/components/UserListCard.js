@@ -35,12 +35,12 @@ export default function UserListCard({ user }) {
   };
 
   const { mutate: mutateUpdate } = useUpdateUser(
-    { userId: user._id, data: {...editedUser, address:editedUser.address} },
+    { userId: user._id, data: { ...editedUser, address: editedUser.address } },
     onUpdateUserSuccess
   );
 
   const handleUpdate = () => {
-    mutateUpdate(editedUser);
+    mutateUpdate({ ...editedUser, address: editedUser.address });
     setOpenEdit(false);
   };
   return (
