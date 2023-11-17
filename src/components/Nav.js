@@ -162,7 +162,7 @@ const Nav = () => {
                       onClick={() => navigate("/delivery-dashboard")}
                     >
                       <FontAwesomeIcon icon={faListAlt} />
-                      <span> Liste des commandes </span>
+                      <span> Liste des livraisons </span>
                     </Button>
                   )}
 
@@ -267,7 +267,7 @@ const Nav = () => {
                     onClick={() => navigate("/delivery-dashboard")}
                   >
                     <FontAwesomeIcon icon={faListAlt} />
-                    <span> Liste des commandes </span>
+                    <span> Liste des livraisons </span>
                   </Button>
                 </>
               )}
