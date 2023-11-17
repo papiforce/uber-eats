@@ -29,7 +29,7 @@ const deleteMeal = async (mealId) => {
 };
 
 export const useGetMenu = (options, onSuccess) => {
-  return useQuery("menu", () => getMenu(options), {
+  return useQuery(["menu", options], () => getMenu(options), {
     onSuccess,
   });
 };
