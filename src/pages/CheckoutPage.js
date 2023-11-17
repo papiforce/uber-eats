@@ -189,16 +189,16 @@ const CheckoutPage = () => {
             <div class="mt-6 border-t border-b py-2">
               <div class="flex items-center justify-between">
                 <p class="text-sm font-medium text-gray-900">Sous-total</p>
-                <p class="font-semibold text-gray-900">{`${
-                  calculateTotal().subtotal
-                } €`}</p>
+                <p class="font-semibold text-gray-900">
+                  {calculateTotal().subtotal} €
+                </p>
               </div>
               <div class="flex items-center justify-between">
                 <p class="text-sm font-medium text-gray-900">Livraison</p>
-                {calculateTotal() > 20 ? (
-                  <p class="font-semibold text-gray-900">Gratuit</p>
+                {calculateTotal().total > 19.99 ? (
+                  <p class="font-semibold text-gray-900">Offerte</p>
                 ) : (
-                  <p class="font-semibold text-gray-900">{`2.99 €`}</p>
+                  <p class="font-semibold text-gray-900">2.99 €</p>
                 )}
               </div>
             </div>

@@ -12,6 +12,11 @@ const DeliveryOrdersPage = () => {
   const [updateOrderSuccess, setupdateOrderSuccesss] = useState(false);
   const [selectedOrder, setselectedOrder] = useState(null);
 
+  const noOrders =
+    orders.free.length === 0 &&
+    orders.pending.length === 0 &&
+    orders.finish.length === 0;
+
   const onGetOrdersSuccess = (payload) => {
     setOrders(payload);
   };
@@ -29,8 +34,8 @@ const DeliveryOrdersPage = () => {
     <Layout>
       <div className="w-full max-w-6xl mx-auto bg-white border border-gray-200 mt-5 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
         <ul className="divide-y mb-0">
-          {!orders && (
-            <p className="mx-auto my-0 max-w-max">Aucune commande en attente</p>
+          {noOrders && (
+            <p className="mx-auto my-0 max-w-max">Aucune commande</p>
           )}
 
           {orders && orders.free.length > 0 && (
