@@ -14,7 +14,7 @@ import {
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import CartModal from "./CartModal";
-import BikePNG from '../assets/img/bike.png';
+import BikePNG from "../assets/img/bike.png";
 import Cookies from "js-cookie";
 
 import { AuthContext } from "contexts/AuthContext";
@@ -22,7 +22,7 @@ import { OrderContext } from "contexts/OrderContext";
 
 const Nav = () => {
   const { auth, setAuth } = useContext(AuthContext);
-  const { latestOrder } = useContext(OrderContext);
+  const { latestOrder, setLatestOrder } = useContext(OrderContext);
 
   const navigate = useNavigate();
 
@@ -77,6 +77,7 @@ const Nav = () => {
 
   const logout = () => {
     setAuth({ isAuthenticated: false, user: null });
+    setLatestOrder(null);
     Cookies.remove("fe-token");
 
     navigate("/");
@@ -110,11 +111,7 @@ const Nav = () => {
             EXPRESS <span className="fw-bold"> FOOD</span>
           </Typography>
           <Typography as="a" href="/">
-            <img
-              className="w-12 m-auto hidden lg:block"
-              alt=""
-              src={BikePNG}
-            />
+            <img className="w-12 m-auto hidden lg:block" alt="" src={BikePNG} />
           </Typography>
 
           <div className="flex items-center gap-4">
@@ -168,7 +165,7 @@ const Nav = () => {
                     <Button
                       size="sm"
                       className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
-                      onClick={() => navigate("/delivery-dashboard")}
+                      onClick={() => navigate("/delivery-dashboard/orders")}
                     >
                       <FontAwesomeIcon icon={faListAlt} />
                       <span> Liste des livraisons </span>
