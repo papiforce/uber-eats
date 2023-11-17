@@ -33,13 +33,12 @@ export default function OrderCardAdmin({ order }) {
         <div class="flex-shrink-0"></div>
         <div class="flex-1 min-w-0">
           <p class="text-xl font-medium text-gray-900 truncate dark:text-white">
-            Date de commande :{" "}
-            {dateCreatedFormated + " à " + hourCreatedFormatted}
+            Date de commande : {dateCreatedFormated} à {hourCreatedFormatted}
           </p>
 
           <p class="text-xl font-medium text-gray-900 truncate dark:text-white">
             Client :{" "}
-            {order.customerId.lastname + " " + order.customerId.firstname}
+            {order.customerId.lastname} {order.customerId.firstname}
           </p>
 
           <p class="text-xl font-medium text-gray-900 truncate dark:text-white">
@@ -56,7 +55,7 @@ export default function OrderCardAdmin({ order }) {
                   ...editedOrderStatus,
                   status: e.target.value,
                 });
-                mutate({status: e.target.value});
+                mutate({ status: e.target.value });
               }}
             >
               <option value="FREE">Gratuit</option>

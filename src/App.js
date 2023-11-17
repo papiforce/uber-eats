@@ -18,7 +18,7 @@ import ProductListPage from "pages/ProductListPage";
 import UsersListPage from "pages/UsersListPage";
 import DeliveryPage from "pages/DeliveryPage";
 import FreeOrdersPage from "pages/FreeOrdersPage";
-import OrderListAdmin from "pages/OrderListAdmin";
+import OrderListAdmin from "pages/OrderListAdminPage";
 
 const App = () => {
   const [auth, setAuth] = useState({
@@ -126,9 +126,9 @@ const App = () => {
           <Route
             path="/dashboard/orders"
             element={
-              // <SecurityGuard adminRedirectionPath="/">
+              <SecurityGuard adminRedirectionPath="/">
                 <OrderListAdmin />
-              // </SecurityGuard>
+              </SecurityGuard>
             }
           />
         </Routes>

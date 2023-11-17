@@ -3,7 +3,7 @@ import { useState } from "react";
 import Layout from "./layouts/Layout";
 import OrderCardAdmin from "components/OrderCardAdmin";
 
-export default function OrderListAdmin() {
+export default function OrderListAdminPage() {
   const [orders, setOrders] = useState([]);
 
   const onGetOrderSuccess = (payload) => {
