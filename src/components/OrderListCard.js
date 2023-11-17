@@ -20,14 +20,26 @@ const OrderListCard = ({ order, update, selected }) => {
   return (
     <li className="p-4">
       <div className="flex flex-row justify-center px-5">
-        <ButtonGroup className="flex-nowrap">
-          <Button onClick={handleSelect}>
-            <FontAwesomeIcon icon={faCheckCircle} />
-          </Button>
-        </ButtonGroup>
+        {order.status === "FREE" && (
+          <ButtonGroup className="flex-nowrap">
+            <Button onClick={handleSelect}>
+              <FontAwesomeIcon icon={faCheckCircle} />
+            </Button>
+          </ButtonGroup>
+        )}
       </div>
       <div>
         <p>Commande ID {order._id}</p>
+        <p> {order.status}</p>
+        <p>{order.address.address}</p>
+        <p>Contenu de la commande</p>
+        <ul>
+          {order.content.map((product) => (
+            <li key={product._id.$oid}>
+              {product.name} x{product.quantity} {product.price}€
+            </li>
+          ))}
+        </ul>
       </div>
     </li>
   );
