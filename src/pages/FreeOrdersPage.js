@@ -1,4 +1,4 @@
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import Layout from "./layouts/Layout";
 import { useGetOrders } from "api/orderQueries";
 import OrderListCard from "components/OrderListCard";
@@ -12,25 +12,25 @@ const FreeOrdersPage = () => {
     setOrders(payload);
   };
 
-
-  // Utilisez la fonction useGetOrders avec les filtres appropriés
   useGetOrders({ onlyActive: false }, onGetOrdersSuccess);
 
-  useEffect(() => 
-   {
-    if(updateOrderSuccess)
-     {
-      setOrders(orders.filter(orders => orders._id !== selectedOrder));
-     }
-    },[selectedOrder]);
-  
+  useEffect(() => {
+    if (updateOrderSuccess) {
+      setOrders(orders.filter((orders) => orders._id !== selectedOrder));
+    }
+  }, [selectedOrder]);
 
   return (
     <Layout>
       <div className="w-full max-w-6xl mx-auto bg-white border border-gray-200 mt-5 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
         <ul className="divide-y">
           {orders.map((order) => (
-            <OrderListCard order={order} key={order._id} update={setupdateOrderSuccesss} selected={setselectedOrder} />
+            <OrderListCard
+              order={order}
+              key={order._id}
+              update={setupdateOrderSuccesss}
+              selected={setselectedOrder}
+            />
           ))}
         </ul>
       </div>

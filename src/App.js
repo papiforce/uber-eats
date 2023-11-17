@@ -70,7 +70,7 @@ const App = () => {
           />
           <Route
             exact
-            path="/delivery_dashboard"
+            path="/delivery-dashboard"
             element={
               <SecurityGuard deliveryRedirectionPath="/">
                 <DeliveryPage />
@@ -78,7 +78,7 @@ const App = () => {
             }
           />
           <Route
-            path="/delivery_dashboard/freeorders"
+            path="/delivery-dashboard/orders"
             element={
               <SecurityGuard deliveryRedirectionPath="/">
                 <FreeOrdersPage />

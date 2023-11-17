@@ -33,7 +33,9 @@ const SecurityGuard = ({
     }
     if (
       deliveryRedirectionPath &&
-      ((auth.isAuthenticated && auth.user.role !== "DELIVERY_PERSON") ||
+      ((auth.isAuthenticated &&
+        auth.user.role !== "DELIVERY_PERSON" &&
+        auth.user.role !== "ADMIN") ||
         !auth.isAuthenticated)
     ) {
       return navigate(deliveryRedirectionPath);
