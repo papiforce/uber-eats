@@ -7,15 +7,19 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { faUser, faListAlt } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCartShopping,
+  faRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
 import CartModal from "./CartModal";
+import Cookies from "js-cookie";
 
 import { AuthContext } from "contexts/AuthContext";
 
 const Nav = () => {
-  const { auth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [openNav, setOpenNav] = useState(false);
@@ -58,11 +62,12 @@ const Nav = () => {
     return localStorage.setItem(isLogged, JSON.stringify(parseCart));
   };
 
-  const navList = (
-    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      {/* Your list items go here */}
-    </ul>
-  );
+  const logout = () => {
+    setAuth({ isAuthenticated: false, user: null });
+    Cookies.remove("fe-token");
+
+    navigate("/");
+  };
 
   useEffect(() => {
     const isLogged = auth.user ? `cart-${auth.user._id}` : "cart";
@@ -94,7 +99,6 @@ const Nav = () => {
             EXPRESS <span className="fw-bold"> FOOD</span>
           </Typography>
           <div className="flex items-center gap-4">
-            <div className="mr-4 hidden lg:block">{navList}</div>
             {!auth.isAuthenticated ? (
               <div className="flex items-center gap-x-1">
                 <Button
@@ -128,9 +132,7 @@ const Nav = () => {
               </div>
             ) : (
               <>
-                {/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
-                {/* Onglet ADMIN pour accèder à l'interface admin */}
-                {auth.user.role === "ADMIN" && (
+                {auth.user && auth.user.role === "ADMIN" && (
                   <Button
                     size="sm"
                     className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
@@ -138,6 +140,17 @@ const Nav = () => {
                   >
                     <FontAwesomeIcon icon={faUser} />
                     <span> Admin </span>
+                  </Button>
+                )}
+                {(auth.user.role === "ADMIN" ||
+                  auth.user.role === "DELIVERY_PERSON") && (
+                  <Button
+                    size="sm"
+                    className="hidden rounded-full bg-white text-black border lg:inline-block w-44"
+                    onClick={() => navigate("/delivery-dashboard")}
+                  >
+                    <FontAwesomeIcon icon={faListAlt} />
+                    <span> Liste des commandes </span>
                   </Button>
                 )}
                 <Button
@@ -150,6 +163,13 @@ const Nav = () => {
                   }
                 >
                   <FontAwesomeIcon icon={faCartShopping} />
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-transparant text-dark rounded-full"
+                  onClick={logout}
+                >
+                  <FontAwesomeIcon icon={faRightFromBracket} />
                 </Button>
               </>
             )}
@@ -208,8 +228,7 @@ const Nav = () => {
             </>
           ) : (
             <>
-              {/* METTRE ICI LES ELEMENTS DU MENU QUAND TU ES CONNECTÉ */}
-              {auth.user.role === "ADMIN" && (
+              {auth.user && auth.user.role === "ADMIN" && (
                 <Button
                   size="sm"
                   className="bg-white text-black border w-full"
@@ -219,6 +238,13 @@ const Nav = () => {
                   <span> Admin </span>
                 </Button>
               )}
+              <Button
+                size="sm"
+                className="bg-transparant text-dark rounded-full"
+                onClick={logout}
+              >
+                <FontAwesomeIcon icon={faRightFromBracket} />
+              </Button>
             </>
           )}
         </MobileNav>
