@@ -47,9 +47,8 @@ const RegisterPage = () => {
         }
       );
       if (response.status === 200) {
-       handleSuccess();
+        handleSuccess();
       } else {
-        console.log(response.data);
         setAlertMessage(null);
       }
     } catch (error) {
