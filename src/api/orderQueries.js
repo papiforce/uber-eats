@@ -75,8 +75,13 @@ export const useUpdateOrderStatusDelivery = (
   });
 };
 
-export const useUpdateOrderStatusAdmin = (orderId, status, code, onSuccess) => {
-  return useMutation(() => updateOrderStatusAdmin(orderId, status, code), {
-    onSuccess,
-  });
+export const useUpdateOrderStatusAdmin = (onSuccess) => {
+  return useMutation(
+    ({ orderId, status }) => {
+      updateOrderStatusAdmin(orderId, status);
+    },
+    {
+      onSuccess,
+    }
+  );
 };
